@@ -29,7 +29,7 @@ const StringButton = ({ text }) => {
         return (
           <React.Fragment key={index}>
             {color === colors['default'] ? (
-              <Typography variant="overline">{word}</Typography>
+              <Typography variant="caption" sx={{ fontSize: 14 }}>{word}</Typography>
             ) : (
                 <Button
                 key={index}

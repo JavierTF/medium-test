@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Button from '@mui/material/Button';
-import { DynamicButtonProps } from '@/interfaces/DynamicButtonProps';
+import { DynamicButtonProps } from '@/interfaces/interfaces';
 
 const DynamicButton: React.FC<DynamicButtonProps> = ({ icon, text, disabled = false, filled = false, url = null, primary = false, disabledAll = false }) => {
   const [windowWidth, setWindowWidth] = useState<number>(0);
@@ -43,7 +43,7 @@ const DynamicButton: React.FC<DynamicButtonProps> = ({ icon, text, disabled = fa
     e.preventDefault();
   };
 
-  const finalUrl = url ?? 'javascript:void(0)';
+  const finalUrl = url ?? '#';
 
   icon = icon ?? '';
   if (primary){

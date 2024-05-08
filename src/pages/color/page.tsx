@@ -2,17 +2,13 @@ import React, { useState, useEffect } from "react";
 import TextField from "@mui/material/TextField";
 import Image from "next/image";
 import IconButton from "@mui/material/IconButton";
-
 import StringTypography from "../../../components/StringTypography";
-import StringButton from "../../../components/StringButton";
-import DynamicButton from "../../../components/DynamicButton.tsx";
-
-import Grid from "@mui/material/Unstable_Grid2";
+import DynamicButton from "../../../components/DynamicButton";
+import Grid from "@mui/material/Grid";
 import Stack from "@mui/material/Stack";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
-
 import OpenInFullIcon from "@mui/icons-material/OpenInFull";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import LockOpenIcon from "@mui/icons-material/LockOpen";
@@ -20,26 +16,78 @@ import AcUnitIcon from "@mui/icons-material/AcUnit";
 import AdjustIcon from "@mui/icons-material/Adjust";
 import CloseIcon from "@mui/icons-material/Close";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+import Checkbox from "@mui/material/Checkbox";
+import StringButton from "../../../components/StringButton";
 
-import db from "../../../lib/firebaseSingleton";
-const { getDatabase, ref, get, set } = require("firebase/database");
+// import tasks from '../../../lib/tasks.json';
 
-import { createTask } from '../../../utils/utils';
+import { MyCardProps } from "@/interfaces/interfaces";
+import { Task } from "@/interfaces/interfaces";
 
-function MyTextField() {
+function MyCard({ tasks }: MyCardProps) {
   const [textValue, setTextValue] = useState("");
-  const [colored, setColored] = useState(false);
+  const [colored, setColored] = useState(true);
   const [disabledAll, setDisabledAll] = useState(true);
 
-  const handleChange = (event) => {
-    let data = event.target.value;
-    setTextValue(data);
+  tasks = [
     {
-      data === "" ? setDisabledAll(true) : setDisabledAll(false);
-    }
+      id: 1,
+      title: "Hacer la #compra",
+      description: "Comprar leche, huevos y pan en https://wwww.my-bread.com",
+      created_at: "2024-05-05T08:00:00",
+      finished_at: null,
+    },
+    {
+      id: 2,
+      title: "Llamar al @médico",
+      description: "Pedir #cita para la revisión anual.",
+      created_at: "2024-05-05T09:00:00",
+      finished_at: null,
+    },
+    {
+      id: 3,
+      title: "Preparar la #presentación",
+      description: "Terminar la presentación para el #trabajo y enviar a xavi@aleph.engineering",
+      created_at: "2024-05-05T10:00:00",
+      finished_at: "2024-05-05T12:00:00",
+    },
+    {
+      id: 4,
+      title: "Salir a correr",
+      description: "#Correr durante 30 minutos en el parque con @dayitecnologia.",
+      created_at: "2024-05-05T13:00:00",
+      finished_at: null,
+    },
+    {
+      id: 5,
+      title: "Enviar el informe",
+      description: "Enviar el informe semanal al @jefe.",
+      created_at: "2024-05-05T14:00:00",
+      finished_at: "2024-05-05T16:00:00",
+    },
+  ];
+
+  console.log(tasks);
+
+  // const [status, setStatus] = useState<"empty" | "filled">("empty");
+
+  useEffect(() => {
+    // if (tasks.length > 0) {
+    //   setStatus("filled");
+    // }
+
+    return () => {
+      // Lógica de limpieza si es necesario
+    };
+  }, [tasks]);
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const data = event.target.value;
+    setTextValue(data);
+    setDisabledAll(data === "");
   };
 
-  const handleBlur = (event) => {
+  const handleBlur = () => {
     setColored(true);
   };
 
@@ -47,48 +95,12 @@ function MyTextField() {
     setColored(false);
   };
 
-  /////////////////////////////////////////
-
-  // const [data, setData] = useState(null);
-  // const [db, setDb] = useState();
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     const database = db;
-  //     setDb(database);
-  //     console.log(db);
-  //     // const taskRef = ref(db, "/tasks/");
-  //     // Aquí puedes usar 'database' para interactuar con tu base de datos
-  //     // Por ejemplo:
-  //     // const snapshot = await ref(db, "tasks");
-  //     // setData(snapshot.val());
-  //   };
-
-  //   fetchData();
-  // }, []);
-
-  // const id = 1;
-  // const title = "Hacer la compra";
-  // const description = "Comprar leche, huevos y pan.";
-  // const created_at = "2024-05-05T08:00:00";
-  // const finished_at = null;
-
-  // createTask(id, title, description, created_at, finished_at)
-  //   .then((result) => {
-  //     // Maneja el resultado según el éxito o el fallo
-  //     if (result.success) {
-  //       console.log(result.message);
-  //     } else {
-  //       console.error(result.message);
-  //     }
-  //   })
-  //   .catch((error) => {
-  //     console.error("Error:", error);
-  //   });
+  const handleClickCheckbox = () => {
+  };
 
   return (
     <div>
-      <Card variant="outlined">
+      <Card variant="outlined" sx={{ borderRadius: "1px" }}>
         <Stack
           direction="row"
           spacing={1}
@@ -118,21 +130,31 @@ function MyTextField() {
           <Image
             src="/images/about.jpg"
             alt="Avatar"
-            width={42}
-            height={36}
-            style={{ borderRadius: "50%" }}
+            width={32}
+            height={29}
+            style={{ borderRadius: "50%", opacity: 0.5 }}
           />
         </Stack>
+        {/* Lista de tareas */}
+        {tasks.map((task) => (
+          <Stack
+            direction="row"
+            spacing={1}
+            alignItems="center"
+            // sx={{ justifyContent: "space-between", width: "99%" }}
+            key={task.id}
+          >
+            <Checkbox onClick={handleClickCheckbox(task.id)} />
+            <StringButton text={`${task.title} ${task.description}`}></StringButton>
+          </Stack>
+        ))}
       </Card>
       <CardContent
         sx={{
           backgroundColor: "#FAFCFB",
           height: "16px",
-          // display: "flex",
-          // alignItems: "center",
         }}
       >
-        {/* <Stack direction={"column"} justifyContent="center"> */}
         <Grid container sx={{ mt: -0.9 }}>
           <Grid item xs={1.3}>
             <DynamicButton
@@ -167,7 +189,7 @@ function MyTextField() {
             </Stack>
           </Grid>
           <Grid item xs={1.7}>
-            <Stack direction="row" spacing={1} justifyContent={'flex-end'}>
+            <Stack direction="row" spacing={1} justifyContent={"flex-end"}>
               <DynamicButton
                 icon={null}
                 text={"Cancel"}
@@ -185,16 +207,9 @@ function MyTextField() {
             </Stack>
           </Grid>
         </Grid>
-        {/* </Stack> */}
       </CardContent>
-
-      {/* <StringButton
-        text={
-          "Hola @usuario mira este #hashtag y visita www.google.com contacta a javiertoussentfis@gmail.com o a asd@asd.com"
-        }
-      /> */}
     </div>
   );
 }
 
-export default MyTextField;
+export default MyCard;

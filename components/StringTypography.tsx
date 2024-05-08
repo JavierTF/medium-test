@@ -1,8 +1,9 @@
 import React from 'react';
 import Typography from '@mui/material/Typography';
 import { changeColor } from '../utils/utils.js';
+import { StringTypographyProps } from '@/interfaces/interfaces.js';
 
-const StringTypography = ({ text }) => {
+const StringTypography: React.FC<StringTypographyProps> = ({ text }) => {
   const words = text.split(' ');
 
   return (
