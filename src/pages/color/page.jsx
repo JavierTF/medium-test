@@ -5,7 +5,7 @@ import IconButton from "@mui/material/IconButton";
 
 import StringTypography from "../../../components/StringTypography";
 import StringButton from "../../../components/StringButton";
-import DynamicButton from "../../../components/DynamicButton";
+import DynamicButton from "../../../components/DynamicButton.tsx";
 
 import Grid from "@mui/material/Unstable_Grid2";
 import Stack from "@mui/material/Stack";
@@ -93,7 +93,7 @@ function MyTextField() {
           direction="row"
           spacing={1}
           alignItems="center"
-          sx={{ justifyContent: "space-between", width: "100%" }}
+          sx={{ justifyContent: "space-between", width: "99%" }}
         >
           <IconButton onClick={handleClick}>
             <AddCircleOutlineIcon color={"primary"} />
@@ -107,17 +107,18 @@ function MyTextField() {
               onChange={handleChange}
               onBlur={handleBlur}
               autoFocus
+              sx={{ width: "94%" }}
             />
           )}
           {colored && (
-            <Box onClick={handleClick} sx={{ width: "100%" }}>
+            <Box onClick={handleClick} sx={{ width: "94%" }}>
               <StringTypography text={textValue} />
             </Box>
           )}
           <Image
             src="/images/about.jpg"
             alt="Avatar"
-            width={40}
+            width={42}
             height={36}
             style={{ borderRadius: "50%" }}
           />
@@ -165,8 +166,8 @@ function MyTextField() {
               />
             </Stack>
           </Grid>
-          <Grid item xs={1.3}>
-            <Stack direction="row" spacing={1}>
+          <Grid item xs={1.7}>
+            <Stack direction="row" spacing={1} justifyContent={'flex-end'}>
               <DynamicButton
                 icon={null}
                 text={"Cancel"}
@@ -179,6 +180,7 @@ function MyTextField() {
                 filled={true}
                 url={null}
                 primary={true}
+                disabledAll={disabledAll}
               />
             </Stack>
           </Grid>

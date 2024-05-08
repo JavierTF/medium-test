@@ -9,6 +9,7 @@ export const colors = {
 };
 
 export function changeColor(word) {
+  word = word.toLowerCase();
   if (word.startsWith("@")) {
     return colors["@"];
   } else if (word.startsWith("#")) {
