@@ -1,5 +1,3 @@
-export {};
-
 import { ref, set } from "firebase/database";
 
 export const colors = {
