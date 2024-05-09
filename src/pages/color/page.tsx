@@ -20,7 +20,7 @@ import Checkbox from "@mui/material/Checkbox";
 import StringButton from "../../../components/StringButton";
 import { findById } from "../../../utils/utils";
 
-// import { tasks } from "../../../lib/tasks";
+import { tasks } from "../../../lib/tasks";
 
 import { MyCardProps } from "@/interfaces/interfaces";
 import { Task } from "@/interfaces/interfaces";
@@ -32,12 +32,13 @@ import { fetchTasks } from "../../../lib/fetchTask";
 
 // function MyCard({ tasks }: MyCardProps) {
 function MyCard() {
+  const [started, setStarted] = useState(false);
   const [textValue, setTextValue] = useState("");
   const [colored, setColored] = useState(true);
   const [disabledAll, setDisabledAll] = useState(true);
   const [checked, setChecked] = useState(false);
   const [action, setAction] = useState("none");
-  const [tasks, setTasks] = useState([]);
+  // const [tasks, setTasks] = useState([]);
 
   useEffect(() => {
     //////
@@ -51,6 +52,10 @@ function MyCard() {
 
   const handleBlur = () => {
     setColored(true);
+  };
+
+  const handleClickToStart = () => {
+    setStarted(true);
   };
 
   const handleClick = () => {
@@ -77,127 +82,156 @@ function MyCard() {
 
   return (
     <div>
-      <Card variant="outlined" sx={{ borderRadius: "1px" }}>
+      {!started && (
         <Stack
           direction="row"
           spacing={1}
           alignItems="center"
           sx={{ justifyContent: "space-between", width: "99%" }}
         >
-          <IconButton onClick={handleClick} disabled={!disabledAll || checked}>
+          <IconButton onClick={handleClickToStart}>
             <AddCircleOutlineIcon color={!checked ? "primary" : "disabled"} />
           </IconButton>
-          {!colored && (
-            <TextField
-              id="outlined-basic"
-              variant="standard"
-              fullWidth
-              value={textValue}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              autoFocus
-              placeholder="Type to add a new task"
-              sx={{ width: "94%" }}
+          <Box onClick={handleClick} sx={{ width: "98%" }}>
+            <StringTypography
+              text={!disabledAll ? textValue : "Type to add a new task"}
+              sx={disabledAll ? { color: "grey" } : undefined}
             />
-          )}
-          {colored && (
-            <Box onClick={handleClick} sx={{ width: "94%" }}>
-              <StringTypography
-                text={!disabledAll ? textValue : "Type to add a new task"}
-                sx={disabledAll ? { color: "grey" } : undefined}
-              />
-            </Box>
-          )}
-          <Image
-            src="/images/about.jpg"
-            alt="Avatar"
-            width={32}
-            height={29}
-            style={{ borderRadius: "50%", opacity: disabledAll ? 0.5 : 1 }}
-          />
+          </Box>
         </Stack>
-        {/* Lista de tareas */}
-        {tasks.map((task) => (
-          <Stack
-            direction="row"
-            spacing={1}
-            alignItems="center"
-            // sx={{ justifyContent: "space-between", width: "99%" }}
-            key={task.id}
+      )}
+      {started && (
+        <React.Fragment>
+          <Card variant="outlined" sx={{ borderRadius: "1px" }}>
+            <Stack
+              direction="row"
+              spacing={1}
+              alignItems="center"
+              sx={{ justifyContent: "space-between", width: "99%" }}
+            >
+              <IconButton
+                onClick={handleClick}
+                disabled={!disabledAll || checked}
+              >
+                <AddCircleOutlineIcon
+                  color={!checked ? "primary" : "disabled"}
+                />
+              </IconButton>
+              {!colored && (
+                <TextField
+                  id="outlined-basic"
+                  variant="standard"
+                  fullWidth
+                  value={textValue}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  autoFocus
+                  placeholder="Type to add a new task"
+                  sx={{ width: "94%" }}
+                />
+              )}
+              {colored && (
+                <Box onClick={handleClick} sx={{ width: "94%" }}>
+                  <StringTypography
+                    text={!disabledAll ? textValue : "Type to add a new task"}
+                    sx={disabledAll ? { color: "grey" } : undefined}
+                  />
+                </Box>
+              )}
+              <Image
+                src="/images/about.jpg"
+                alt="Avatar"
+                width={32}
+                height={29}
+                style={{ borderRadius: "50%", opacity: disabledAll ? 0.5 : 1 }}
+              />
+            </Stack>
+            {/* Lista de tareas */}
+            {tasks.map((task) => (
+              <Stack
+                direction="row"
+                spacing={1}
+                alignItems="center"
+                // sx={{ justifyContent: "space-between", width: "99%" }}
+                key={task.id}
+              >
+                <Checkbox
+                  onClick={(e) =>
+                    handleClickCheckbox(task.id, e.target.checked)
+                  }
+                />
+                <StringButton text={task.title}></StringButton>
+              </Stack>
+            ))}
+          </Card>
+          <CardContent
+            sx={{
+              backgroundColor: "#FAFCFB",
+              height: "18px",
+            }}
           >
-            <Checkbox
-              onClick={(e) => handleClickCheckbox(task.id, e.target.checked)}
-            />
-            <StringButton text={task.title}></StringButton>
-          </Stack>
-        ))}
-      </Card>
-      <CardContent
-        sx={{
-          backgroundColor: "#FAFCFB",
-          height: "16px",
-        }}
-      >
-        <Grid container sx={{ mt: -0.9 }}>
-          <Grid item xs={1.3}>
-            <DynamicButton
-              icon={<OpenInFullIcon />}
-              text={"Open"}
-              disabled={disabledAll}
-              filled={true}
-            />
-          </Grid>
-          <Grid item xs={9}>
-            <Stack direction="row" spacing={1}>
-              <DynamicButton
-                icon={<CalendarTodayIcon />}
-                text={"Today"}
-                disabled={disabledAll}
-              />
-              <DynamicButton
-                icon={<LockOpenIcon />}
-                text={"Public"}
-                disabled={disabledAll}
-              />
-              <DynamicButton
-                icon={<AcUnitIcon />}
-                text={"Highlight"}
-                disabled={disabledAll}
-              />
-              <DynamicButton
-                icon={<AdjustIcon />}
-                text={"Estimation"}
-                disabled={disabledAll}
-              />
-            </Stack>
-          </Grid>
-          <Grid item xs={1.7}>
-            <Stack direction="row" spacing={1} justifyContent={"flex-end"}>
-              <DynamicButton
-                icon={null}
-                text={"Cancel"}
-                filled={true}
-                url={null}
-              />
-              <DynamicButton
-                icon={<CloseIcon />}
-                text={"Ok"}
-                filled={true}
-                url={null}
-                primary={true}
-                disabledAll={disabledAll}
-                actionButton={
-                  !disabledAll && action == "add"
-                    ? "add"
-                    : action == "modify"
-                    ? "modify"
-                    : "none"
-                }
-              />
-            </Stack>
-          </Grid>
-        </Grid>
-      </CardContent>
+            <Grid container sx={{ mt: -0.9 }}>
+              <Grid item xl={1.3} sm={12}>
+                <DynamicButton
+                  icon={<OpenInFullIcon />}
+                  text={"Open"}
+                  disabled={disabledAll}
+                  filled={true}
+                />
+              </Grid>
+              <Grid item xl={9} sm={12}>
+                <Stack direction="row" spacing={1}>
+                  <DynamicButton
+                    icon={<CalendarTodayIcon />}
+                    text={"Today"}
+                    disabled={disabledAll}
+                  />
+                  <DynamicButton
+                    icon={<LockOpenIcon />}
+                    text={"Public"}
+                    disabled={disabledAll}
+                  />
+                  <DynamicButton
+                    icon={<AcUnitIcon />}
+                    text={"Highlight"}
+                    disabled={disabledAll}
+                  />
+                  <DynamicButton
+                    icon={<AdjustIcon />}
+                    text={"Estimation"}
+                    disabled={disabledAll}
+                  />
+                </Stack>
+              </Grid>
+              <Grid item xl={1.7} sm={12}>
+                <Stack direction="row" spacing={1} justifyContent={"flex-end"}>
+                  <DynamicButton
+                    icon={null}
+                    text={"Cancel"}
+                    filled={true}
+                    url={null}
+                  />
+                  <DynamicButton
+                    icon={<CloseIcon />}
+                    text={"Ok"}
+                    filled={true}
+                    url={null}
+                    primary={true}
+                    disabledAll={disabledAll}
+                    actionButton={
+                      !disabledAll && action == "add"
+                        ? "add"
+                        : action == "modify"
+                        ? "modify"
+                        : "none"
+                    }
+                  />
+                </Stack>
+              </Grid>
+            </Grid>
+          </CardContent>
+        </React.Fragment>
+      )}
     </div>
   );
 }

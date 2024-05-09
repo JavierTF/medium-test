@@ -43,11 +43,11 @@ const DynamicButton: React.FC<DynamicButtonProps> = ({
         id: getCurrentDateTimeAsString(),
         title: "Enviar el informe. Enviar el informe semanal al @jefe.",
         created_at: "2024-05-05T14:00:00",
-        finished_at: "2024-05-05T16:00:00"
+        finished_at: null
       };
       const taskRef = await ref(db, "/tasks/" + task.id);
   
-      set(taskRef, { task });
+      set(taskRef, { ...task });
     }
   };
 
@@ -108,7 +108,7 @@ const DynamicButton: React.FC<DynamicButtonProps> = ({
         startIcon={icon}
         href={finalUrl}
         disabled={disabled}
-        sx={buttonSx}
+        sx={{ ...buttonSx, textTransform: 'none' }}
         onClick={handleClick}
       >
         {windowWidth >= 1230 && text}
