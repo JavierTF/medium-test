@@ -8,26 +8,29 @@ import CustomSnackbar from "../components/CustomSnackbar";
 
 function CustomPaper({ elevation = 3, sx = {} }) {
   const [taskList, setTaskList] = useState([]);
+  const [open, setOpen] = useState(false); // Initial state for Snackbar
   const gContext = useContext(TaskContext);
 
   useEffect(() => {
-    // Update taskList and potentially trigger CustomSnackbar render on changes
-    console.log("gContext.dialogText", gContext.dialogText);
+    // Update taskList and potentially trigger CustomSnackbar render
     if (gContext.taskList) {
       setTaskList(gContext.taskList);
     }
-    if (gContext.dialogText !== "") {
-      gContext.dialogText = "";
-      // No need to check for empty string here (handled in CustomSnackbar)
+    console.log("gContext.dialogText", gContext.dialogText);
+    if (gContext.dialogText && gContext.dialogText.length > 0) {
+      // More concise check for truthy dialogText
+      setOpen(true); // Set open state for Snackbar on dialogText change
+    } else {
+      setOpen(false); // Close Snackbar if dialogText becomes empty/falsy
     }
-  }, [gContext.taskList, gContext.dialogText]);
+  }, [gContext.taskList, gContext.dialogText, gContext]);
 
   return (
     <Paper elevation={elevation} sx={{ ...sx }}>
       <MyCard tasks={taskList} />
-      {gContext.dialogText && gContext.dialogText.length > 0 && (
+      {open && (
         <CustomSnackbar
-          open={gContext.dialogText !== ""}
+          open={open}
           message={gContext.dialogText}
           severity={gContext.dialogSeverity}
         />

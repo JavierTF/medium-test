@@ -4,15 +4,15 @@ import Alert from "@mui/material/Alert";
 import { TaskContext } from "@/contexts/taskContext";
 
 function CustomSnackbar({ open, message, severity }) {
-    const gContext = useContext(TaskContext);
+  const gContext = useContext(TaskContext);
 
-    // useEffect(() => {
+  // useEffect(() => {
 
-    // }, [gContext.dialogText])
+  // }, [gContext.dialogText])
 
-    const handleClose = () => {
-        gContext.dialogText = ''
-    }
+  const handleClose = () => {
+    gContext.dialogText = "";
+  };
 
   return (
     <Snackbar
@@ -27,7 +27,7 @@ function CustomSnackbar({ open, message, severity }) {
         variant="filled"
         sx={{ width: "100%" }}
       >
-        {message} sdf
+        {message}
       </Alert>
     </Snackbar>
   );
