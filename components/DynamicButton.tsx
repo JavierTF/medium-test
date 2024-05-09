@@ -56,12 +56,11 @@ const DynamicButton: React.FC<DynamicButtonProps> = ({
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    console.log('----OKOKOK-----')
     if (primary) {
+      console.log('----OKOKOK-----');
       tasks.push({
         id: 6,
         title: "Hacer #pruebas y #documentación",
-        description: "Informar a @Frank y actualizar el proyecto en https://www/github.com",
         created_at: "2024-05-05T14:00:00",
         finished_at: "2024-05-05T16:00:00",
       });

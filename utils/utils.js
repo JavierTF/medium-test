@@ -1,5 +1,8 @@
 import { ref, set } from "firebase/database";
 
+/* The `export const colors` object is defining a set of color values associated with specific types of
+words or elements. Each key in the object represents a type of word or element, and the
+corresponding value is the color in RGBA format assigned to that type. */
 export const colors = {
   "@": "rgba(55, 162, 126, 1)", // Verde
   "#": "rgba(118, 89, 200, 1)", // Morado
@@ -8,6 +11,17 @@ export const colors = {
   default: "rgba(0, 0, 0, 1)", // Negro
 };
 
+/**
+ * The function `changeColor` takes a word as input and returns a color based on certain conditions
+ * such as starting with '@', '#', being a link, an email, or default color.
+ * @param word - The `changeColor` function takes a word as input and checks if the word matches
+ * certain patterns to determine the color to assign to it. The function checks if the word starts with
+ * "@" or "#", if it is a URL or a website link, if it is an email address, or if none
+ * @returns a color based on the type of input word. If the word starts with "@" symbol, it returns the
+ * color associated with "@". If the word starts with "#" symbol, it returns the color associated with
+ * "#". If the word is a URL or a website link, it returns the color associated with "link". If the
+ * word is an email address, it returns the color associated with
+ */
 export function changeColor(word) {
   word = word.toLowerCase();
   if (word.startsWith("@")) {
@@ -23,6 +37,16 @@ export function changeColor(word) {
   }
 }
 
+/**
+ * The function `lightenColor` takes a color in RGBA format and returns a slightly lighter version of
+ * the color with reduced opacity.
+ * @param color - The `lightenColor` function takes a color value in RGBA format as input and returns a
+ * new RGBA color with reduced opacity. If the input color is not in the correct format, it returns a
+ * transparent black color.
+ * @returns The function `lightenColor` takes a color in RGBA format as input, extracts the RGB values,
+ * and returns a new RGBA color with the same RGB values but with an alpha value of 0.09. If the input
+ * color does not match the expected format, it returns "rgba(0, 0, 0, 0)".
+ */
 export function lightenColor(color) {
   const matches = color.match(
     /rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*(\d+(\.\d+)?))?\)/
@@ -39,6 +63,16 @@ export function lightenColor(color) {
   return `rgba(${r}, ${g}, ${b}, 0.09)`;
 }
 
+/**
+ * The function findById takes an array and an id to find, then returns the object in the array with
+ * the matching id.
+ * @param arr - An array of objects.
+ * @param idToFind - The `idToFind` parameter is the ID value that you want to search for within the
+ * array of objects (`arr`). The `findById` function will search for an object in the array that has
+ * the specified ID value and return that object if found.
+ * @returns The `findById` function is returning an object from the `arr` array that has an `id`
+ * property matching the `idToFind` parameter.
+ */
 export function findById(arr, idToFind) {
   return arr.find(obj => obj.id === idToFind);
 }

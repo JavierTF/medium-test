@@ -65,9 +65,11 @@ function MyCard() {
     if (task) {
       if (isChecked) {
         console.log(task.title);
+        setDisabledAll(false);
         setTextValue(task.title);
         setAction("modify");
       } else {
+        setDisabledAll(true);
         setTextValue("");
         setAction("none");
       }
@@ -85,7 +87,7 @@ function MyCard() {
           sx={{ justifyContent: "space-between", width: "99%" }}
         >
           <IconButton onClick={handleClick} disabled={!disabledAll || checked}>
-            <AddCircleOutlineIcon color={"primary"} />
+            <AddCircleOutlineIcon color={!checked ? "primary" : "disabled"} />
           </IconButton>
           {!colored && (
             <TextField
@@ -96,12 +98,13 @@ function MyCard() {
               onChange={handleChange}
               onBlur={handleBlur}
               autoFocus
+              placeholder="Type to add a new task"
               sx={{ width: "94%" }}
             />
           )}
           {colored && (
             <Box onClick={handleClick} sx={{ width: "94%" }}>
-              <StringTypography text={textValue} />
+              <StringTypography text={!disabledAll ? textValue :  "Type to add a new task"} sx={disabledAll ? { color: 'grey' } : undefined} />
             </Box>
           )}
           <Image
@@ -157,7 +160,7 @@ function MyCard() {
               />
               <DynamicButton
                 icon={<AcUnitIcon />}
-                text={"Normal"}
+                text={"Highlight"}
                 disabled={disabledAll}
               />
               <DynamicButton
