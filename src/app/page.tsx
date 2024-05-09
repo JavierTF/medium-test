@@ -1,7 +1,7 @@
 'use client'
 
 import React from "react";
-import tasks from '../../lib/tasks.json';
+import tasks from '../../lib/tasks';
 import MyCard from "../pages/color/page";
 
 function TaskContainer() {

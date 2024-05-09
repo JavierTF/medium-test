@@ -24,23 +24,23 @@ export function changeColor(word) {
 }
 
 export function lightenColor(color) {
-  // Extraemos los componentes de color del string RGBA
   const matches = color.match(
     /rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*(\d+(\.\d+)?))?\)/
   );
 
-  // Si no hay coincidencias, devolvemos un color transparente
   if (!matches) {
     return "rgba(0, 0, 0, 0)";
   }
 
-  // Extraemos los componentes de color y la opacidad del resultado
   const r = parseInt(matches[1], 10);
   const g = parseInt(matches[2], 10);
   const b = parseInt(matches[3], 10);
 
-  // Construimos el string del color RGBA resultante con una opacidad del 9%
   return `rgba(${r}, ${g}, ${b}, 0.09)`;
+}
+
+export function findById(arr, idToFind) {
+  return arr.find(obj => obj.id === idToFind);
 }
 
 // Ejemplo de uso

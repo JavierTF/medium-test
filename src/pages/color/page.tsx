@@ -18,60 +18,24 @@ import CloseIcon from "@mui/icons-material/Close";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import Checkbox from "@mui/material/Checkbox";
 import StringButton from "../../../components/StringButton";
+import { findById } from "../../../utils/utils";
 
-// import tasks from '../../../lib/tasks.json';
+import { tasks } from "../../../lib/tasks";
 
 import { MyCardProps } from "@/interfaces/interfaces";
 import { Task } from "@/interfaces/interfaces";
 
-function MyCard({ tasks }: MyCardProps) {
+// function MyCard({ tasks }: MyCardProps) {
+function MyCard() {
   const [textValue, setTextValue] = useState("");
   const [colored, setColored] = useState(true);
   const [disabledAll, setDisabledAll] = useState(true);
-
-  tasks = [
-    {
-      id: 1,
-      title: "Hacer la #compra",
-      description: "Comprar leche, huevos y pan en https://wwww.my-bread.com",
-      created_at: "2024-05-05T08:00:00",
-      finished_at: null,
-    },
-    {
-      id: 2,
-      title: "Llamar al @médico",
-      description: "Pedir #cita para la revisión anual.",
-      created_at: "2024-05-05T09:00:00",
-      finished_at: null,
-    },
-    {
-      id: 3,
-      title: "Preparar la #presentación",
-      description: "Terminar la presentación para el #trabajo y enviar a xavi@aleph.engineering",
-      created_at: "2024-05-05T10:00:00",
-      finished_at: "2024-05-05T12:00:00",
-    },
-    {
-      id: 4,
-      title: "Salir a correr",
-      description: "#Correr durante 30 minutos en el parque con @dayitecnologia.",
-      created_at: "2024-05-05T13:00:00",
-      finished_at: null,
-    },
-    {
-      id: 5,
-      title: "Enviar el informe",
-      description: "Enviar el informe semanal al @jefe.",
-      created_at: "2024-05-05T14:00:00",
-      finished_at: "2024-05-05T16:00:00",
-    },
-  ];
-
-  console.log(tasks);
-
-  // const [status, setStatus] = useState<"empty" | "filled">("empty");
+  const [checked, setChecked] = useState(false);
+  const [action, setAction] = useState("none");
+  // const [tasks, setTasks] = useState([]);
 
   useEffect(() => {
+    console.log(action);
     // if (tasks.length > 0) {
     //   setStatus("filled");
     // }
@@ -79,7 +43,7 @@ function MyCard({ tasks }: MyCardProps) {
     return () => {
       // Lógica de limpieza si es necesario
     };
-  }, [tasks]);
+  }, []);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const data = event.target.value;
@@ -93,9 +57,22 @@ function MyCard({ tasks }: MyCardProps) {
 
   const handleClick = () => {
     setColored(false);
+    setAction("add");
   };
 
-  const handleClickCheckbox = () => {
+  const handleClickCheckbox = (idTask: number, isChecked: boolean) => {
+    const task = findById(tasks, idTask);
+    if (task) {
+      if (isChecked) {
+        console.log(task.title);
+        setTextValue(task.title);
+        setAction("modify");
+      } else {
+        setTextValue("");
+        setAction("none");
+      }
+    }
+    setChecked(isChecked);
   };
 
   return (
@@ -107,7 +84,7 @@ function MyCard({ tasks }: MyCardProps) {
           alignItems="center"
           sx={{ justifyContent: "space-between", width: "99%" }}
         >
-          <IconButton onClick={handleClick}>
+          <IconButton onClick={handleClick} disabled={!disabledAll || checked}>
             <AddCircleOutlineIcon color={"primary"} />
           </IconButton>
           {!colored && (
@@ -132,7 +109,7 @@ function MyCard({ tasks }: MyCardProps) {
             alt="Avatar"
             width={32}
             height={29}
-            style={{ borderRadius: "50%", opacity: 0.5 }}
+            style={{ borderRadius: "50%", opacity: disabledAll ? 0.5 : 1 }}
           />
         </Stack>
         {/* Lista de tareas */}
@@ -144,8 +121,10 @@ function MyCard({ tasks }: MyCardProps) {
             // sx={{ justifyContent: "space-between", width: "99%" }}
             key={task.id}
           >
-            <Checkbox onClick={handleClickCheckbox(task.id)} />
-            <StringButton text={`${task.title} ${task.description}`}></StringButton>
+            <Checkbox
+              onClick={(e) => handleClickCheckbox(task.id, e.target.checked)}
+            />
+            <StringButton text={task.title}></StringButton>
           </Stack>
         ))}
       </Card>
@@ -203,6 +182,13 @@ function MyCard({ tasks }: MyCardProps) {
                 url={null}
                 primary={true}
                 disabledAll={disabledAll}
+                actionButton={
+                  !disabledAll && action == "add"
+                    ? "add"
+                    : action == "modify"
+                    ? "modify"
+                    : "none"
+                }
               />
             </Stack>
           </Grid>

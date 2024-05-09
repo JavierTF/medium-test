@@ -6,6 +6,7 @@ export interface DynamicButtonProps {
     url?: string | null;
     primary?: boolean;
     disabledAll?: boolean;
+    actionButton?: string;
 }
 
 export interface StringTypographyProps {
