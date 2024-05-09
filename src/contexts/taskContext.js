@@ -1,8 +1,15 @@
-import React, { createContext, useState, useEffect } from "react";
-const { getDatabase, ref, get, set } = require("firebase/database");
+import React, { createContext, useState, useEffect, useRef } from "react";
+import { getDatabase, ref, get } from "firebase/database";
 import db from "../../lib/firebaseSingleton";
+import Task from "../interfaces/interfaces";
 
-export const TaskContext = createContext();
+export const TaskContext = createContext({
+  tasks: null,
+  emailCountRef: 0,
+  linkCountRef: 0,
+  titleTask: '',
+  openDialog: false,
+});
 
 export const TaskProvider = ({ children }) => {
   const [taskList, setTaskList] = useState([]);
@@ -15,7 +22,7 @@ export const TaskProvider = ({ children }) => {
         if (tasksData) {
           const tasksArray = Object.values(tasksData);
           setTaskList(tasksArray);
-          console.log(tasksArray);
+          console.log("tasksArray!!!", tasksArray);
         }
       } catch (error) {
         console.error("Error al obtener las tareas:", error);
@@ -26,6 +33,12 @@ export const TaskProvider = ({ children }) => {
   }, []);
 
   return (
-    <TaskContext.Provider value={{ taskList }}>{children}</TaskContext.Provider>
+    <React.Fragment>
+      {taskList ? (
+        <TaskContext.Provider value={{ taskList }}>
+          {children}
+        </TaskContext.Provider>
+      ) : <div>Loading...</div>}
+    </React.Fragment>
   );
 };

@@ -32,3 +32,10 @@ export interface Task {
 export interface MyCardProps {
     tasks: Task[];
 }
+
+export interface TaskContext {
+    tasks: Task[];
+    emailCountRef: number;
+    linkCountRef: number;
+    titleTask: string;
+}

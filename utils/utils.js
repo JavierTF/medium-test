@@ -97,6 +97,24 @@ export function getCurrentDateTimeAsString() {
   return formattedDateTime;
 }
 
+/**
+ * The function `isValidTitle` checks if a given title task is valid by ensuring it is not undefined,
+ * null, an array, '0', or an empty string.
+ * @param titleTask - The `isValidTitle` function checks if the `titleTask` meets certain conditions to
+ * be considered valid. The conditions are:
+ * @returns The function `isValidTitle` returns a boolean value indicating whether the `titleTask`
+ * parameter is a valid title.
+ */
+export function isValidTitle(titleTask) {
+  return (
+    titleTask !== undefined &&
+    titleTask !== null &&
+    !Array.isArray(titleTask) &&
+    titleTask !== '0' &&
+    titleTask !== ''
+  );
+}
+
 // Ejemplo de uso
 const text = "Hola @usuario, mira este #hashtag y visita www.google.com";
 const colors2 = text.split(" ").map(changeColor);

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Button from "@mui/material/Button";
 import { DynamicButtonProps } from "@/interfaces/interfaces";
 import CloseIcon from "@mui/icons-material/Close";
@@ -8,7 +8,10 @@ import db from "../lib/firebaseSingleton";
 import type { InferGetServerSidePropsType, GetServerSideProps } from "next";
 import { getDatabase, ref, onValue, off, set } from "firebase/database";
 import { fetchTasks } from "../lib/fetchTask";
-import { getCurrentDateTimeAsString } from "../utils/utils";
+import { getCurrentDateTimeAsString, isValidTitle } from "../utils/utils";
+import { TaskContext } from "@/contexts/taskContext";
+import Snackbar from "@mui/material/Snackbar";
+import Alert from "@mui/material/Alert";
 
 const DynamicButton: React.FC<DynamicButtonProps> = ({
   icon,
@@ -21,6 +24,9 @@ const DynamicButton: React.FC<DynamicButtonProps> = ({
   actionButton = "none",
 }) => {
   const [windowWidth, setWindowWidth] = useState<number>(0);
+  const [open, setOpen] = useState<boolean>(false);
+
+  const contexto = useContext(TaskContext);
 
   useEffect(() => {
     const handleResize = () => {
@@ -39,16 +45,26 @@ const DynamicButton: React.FC<DynamicButtonProps> = ({
   const handleClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     if (primary && db) {
-      let task = {
-        id: getCurrentDateTimeAsString(),
-        title: "Enviar el informe. Enviar el informe semanal al @jefe.",
-        created_at: "2024-05-05T14:00:00",
-        finished_at: null
-      };
-      const taskRef = await ref(db, "/tasks/" + task.id);
-  
-      set(taskRef, { ...task });
+      console.log("contexto.titleTask", contexto.titleTask);
+      console.log("contexto", contexto);
+      if (contexto.titleTask) {
+        let task = {
+          id: getCurrentDateTimeAsString(),
+          title: contexto.titleTask,
+          created_at: "2024-05-05T14:00:00",
+          finished_at: null,
+        };
+        const taskRef = await ref(db, "/tasks/" + task.id);
+        set(taskRef, { ...task });
+      } else {
+        console.log("entre");
+        setOpen(true);
+      }
     }
+  };
+
+  const handleCloseSnackBar = () => {
+    setOpen(false);
   };
 
   const buttonVariant: "contained" | "outlined" = filled
@@ -108,11 +124,24 @@ const DynamicButton: React.FC<DynamicButtonProps> = ({
         startIcon={icon}
         href={finalUrl}
         disabled={disabled}
-        sx={{ ...buttonSx, textTransform: 'none' }}
+        sx={{ ...buttonSx, textTransform: "none" }}
         onClick={handleClick}
       >
         {windowWidth >= 1230 && text}
       </Button>
+      {open && (
+        <Snackbar open={open} autoHideDuration={3000} onClose={handleCloseSnackBar}>
+          <Alert
+            onClose={handleCloseSnackBar}
+            severity="error"
+            variant="filled"
+            sx={{ width: "100%" }}
+            key={'topcenter'}
+          >
+            Please, fill the field to add a new task.
+          </Alert>
+        </Snackbar>
+      )}
     </div>
   );
 };
