@@ -4,6 +4,11 @@ import { DynamicButtonProps } from "@/interfaces/interfaces";
 import CloseIcon from "@mui/icons-material/Close";
 import SaveIcon from "@mui/icons-material/Save";
 import { tasks } from "../lib/tasks";
+import db from "../lib/firebaseSingleton";
+import type { InferGetServerSidePropsType, GetServerSideProps } from "next";
+import { getDatabase, ref, onValue, off, set } from "firebase/database";
+import { fetchTasks } from "../lib/fetchTask";
+import { getCurrentDateTimeAsString } from "../utils/utils";
 
 const DynamicButton: React.FC<DynamicButtonProps> = ({
   icon,
@@ -31,6 +36,21 @@ const DynamicButton: React.FC<DynamicButtonProps> = ({
     };
   }, []);
 
+  const handleClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    if (primary && db) {
+      let task = {
+        id: getCurrentDateTimeAsString(),
+        title: "Enviar el informe. Enviar el informe semanal al @jefe.",
+        created_at: "2024-05-05T14:00:00",
+        finished_at: "2024-05-05T16:00:00"
+      };
+      const taskRef = await ref(db, "/tasks/" + task.id);
+  
+      set(taskRef, { task });
+    }
+  };
+
   const buttonVariant: "contained" | "outlined" = filled
     ? "contained"
     : "outlined";
@@ -53,19 +73,6 @@ const DynamicButton: React.FC<DynamicButtonProps> = ({
   if (text === "Cancel" && windowWidth < 1230) {
     buttonSx.visibility = "hidden";
   }
-
-  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    if (primary) {
-      console.log('----OKOKOK-----');
-      tasks.push({
-        id: 6,
-        title: "Hacer #pruebas y #documentación",
-        created_at: "2024-05-05T14:00:00",
-        finished_at: "2024-05-05T16:00:00",
-      });
-    }
-  };
 
   const finalUrl = url ?? "#";
 

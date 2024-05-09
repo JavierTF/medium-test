@@ -20,10 +20,15 @@ import Checkbox from "@mui/material/Checkbox";
 import StringButton from "../../../components/StringButton";
 import { findById } from "../../../utils/utils";
 
-import { tasks } from "../../../lib/tasks";
+// import { tasks } from "../../../lib/tasks";
 
 import { MyCardProps } from "@/interfaces/interfaces";
 import { Task } from "@/interfaces/interfaces";
+
+import db from "../../../lib/firebaseSingleton";
+import type { InferGetServerSidePropsType, GetServerSideProps } from "next";
+import { getDatabase, ref, onValue, off, set } from "firebase/database";
+import { fetchTasks } from "../../../lib/fetchTask";
 
 // function MyCard({ tasks }: MyCardProps) {
 function MyCard() {
@@ -32,17 +37,10 @@ function MyCard() {
   const [disabledAll, setDisabledAll] = useState(true);
   const [checked, setChecked] = useState(false);
   const [action, setAction] = useState("none");
-  // const [tasks, setTasks] = useState([]);
+  const [tasks, setTasks] = useState([]);
 
   useEffect(() => {
-    console.log(action);
-    // if (tasks.length > 0) {
-    //   setStatus("filled");
-    // }
-
-    return () => {
-      // Lógica de limpieza si es necesario
-    };
+    //////
   }, []);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -104,7 +102,10 @@ function MyCard() {
           )}
           {colored && (
             <Box onClick={handleClick} sx={{ width: "94%" }}>
-              <StringTypography text={!disabledAll ? textValue :  "Type to add a new task"} sx={disabledAll ? { color: 'grey' } : undefined} />
+              <StringTypography
+                text={!disabledAll ? textValue : "Type to add a new task"}
+                sx={disabledAll ? { color: "grey" } : undefined}
+              />
             </Box>
           )}
           <Image
@@ -200,5 +201,13 @@ function MyCard() {
     </div>
   );
 }
+
+// export const getServerSideProps = (async () => {
+//   // Fetch data from external API
+//   const res = await fetch('https://api.github.com/repos/vercel/next.js')
+//   const Task: Task = await res.json()
+//   // Pass data to the page via props
+//   return { props: { Task } }
+// }) satisfies GetServerSideProps<{ Task: Task }>
 
 export default MyCard;

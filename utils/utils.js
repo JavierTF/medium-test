@@ -77,6 +77,26 @@ export function findById(arr, idToFind) {
   return arr.find(obj => obj.id === idToFind);
 }
 
+/**
+ * The function getCurrentDateTimeAsString returns the current date and time in a formatted string.
+ * @returns The `getCurrentDateTimeAsString` function returns the current date and time as a formatted
+ * string in the following format: "YYYY-MM-DD HH:MM:SS" (year-month-day hours:minutes:seconds).
+ */
+export function getCurrentDateTimeAsString() {
+  const currentDate = new Date();
+
+  const year = currentDate.getFullYear();
+  const month = String(currentDate.getMonth() + 1).padStart(2, '0'); // El mes está basado en 0, por eso sumamos 1
+  const day = String(currentDate.getDate()).padStart(2, '0');
+  const hours = String(currentDate.getHours()).padStart(2, '0');
+  const minutes = String(currentDate.getMinutes()).padStart(2, '0');
+  const seconds = String(currentDate.getSeconds()).padStart(2, '0');
+
+  const formattedDateTime = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+
+  return formattedDateTime;
+}
+
 // Ejemplo de uso
 const text = "Hola @usuario, mira este #hashtag y visita www.google.com";
 const colors2 = text.split(" ").map(changeColor);
