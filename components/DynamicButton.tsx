@@ -49,9 +49,9 @@ const DynamicButton: React.FC<DynamicButtonProps> = ({
   const handleClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     if (primary && db) {
-      console.log("probando", gContext.idTask);
-      console.log("contexto.titleTask", gContext.titleTask);
-      console.log("contexto", gContext);
+      // console.log("probando", gContext.idTask);
+      // console.log("contexto.titleTask", gContext.titleTask);
+      console.log("contexto handleCkick", gContext);
       if (gContext.titleTask) {
         if (gContext.action == "add") {
           await createTask(gContext);

@@ -54,6 +54,9 @@ function MyCard({ tasks }: MyCardProps) {
     setTextValue(data);
     gContext.titleTask = data;
     setDisabledAll(data === "");
+    if (data === "") {
+      gContext.action = "none";
+    }
   };
 
   const handleBlur = () => {
@@ -62,16 +65,19 @@ function MyCard({ tasks }: MyCardProps) {
 
   const handleClickToStart = () => {
     setStarted(true);
+    gContext.action = "add";
   };
 
   const handleClick = () => {
     setColored(false);
-    if (textValue) {
+    if (gContext.action && gContext.action === "none") {
       gContext.action = "add";
-      if (checked) {
-        gContext.action = "modify";
-      }
     }
+    // if (textValue) {
+    //   if (checked) {
+    //     gContext.action = "modify";
+    //   }
+    // }
   };
 
   const handleClickDelete = async (idTask: string) => {

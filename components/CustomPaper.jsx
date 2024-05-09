@@ -11,14 +11,16 @@ function CustomPaper({ elevation = 3, sx = {} }) {
   const gContext = useContext(TaskContext);
 
   useEffect(() => {
+    // Update taskList and potentially trigger CustomSnackbar render on changes
+    console.log("gContext.dialogText", gContext.dialogText);
     if (gContext.taskList) {
       setTaskList(gContext.taskList);
     }
-  }, [gContext.taskList]);
-
-  useEffect(() => {
-    console.log('gContext.dialogText', gContext)
-  }, [gContext.dialogText]);
+    if (gContext.dialogText !== "") {
+      gContext.dialogText = "";
+      // No need to check for empty string here (handled in CustomSnackbar)
+    }
+  }, [gContext.taskList, gContext.dialogText]);
 
   return (
     <Paper elevation={elevation} sx={{ ...sx }}>

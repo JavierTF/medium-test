@@ -1,4 +1,4 @@
-import { ref, set, remove } from "firebase/database";
+import { ref, set, remove, update } from "firebase/database";
 import db from "../lib/firebaseSingleton";
 
 /* The `export const colors` object is defining a set of color values associated with specific types of
@@ -143,6 +143,14 @@ export const createTask = async (gContext) => {
   }
 };
 
+/**
+ * The `editTask` function updates the title of a task in a database and logs a success message.
+ * @param taskId - The `taskId` parameter is the unique identifier of the task that you want to edit.
+ * It is used to locate the specific task in the database and update its title.
+ * @param newTitle - The `newTitle` parameter in the `editTask` function represents the updated title
+ * that you want to set for a specific task identified by `taskId`. This function updates the title of
+ * the task in the database to the new title provided.
+ */
 export const editTask = async (taskId, newTitle) => {
   try {
     if (db) {
