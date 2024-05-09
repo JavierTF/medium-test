@@ -66,7 +66,12 @@ function MyCard({ tasks }: MyCardProps) {
 
   const handleClick = () => {
     setColored(false);
-    gContext.action = "add";
+    if (textValue) {
+      gContext.action = "add";
+      if (checked) {
+        gContext.action = "modify";
+      }
+    }
   };
 
   const handleClickDelete = async (idTask: string) => {
@@ -77,6 +82,7 @@ function MyCard({ tasks }: MyCardProps) {
       await deleteTask(idTask);
       setChecked(false);
     }
+    gContext.action = "delete";
   };
 
   const handleClickCheckbox = (idTask: string, isChecked: boolean) => {
@@ -90,11 +96,13 @@ function MyCard({ tasks }: MyCardProps) {
           gContext.action = "modify";
           console.log("idTask", idTask);
           gContext.idTask = idTask;
+          gContext.titleTask = task.title;
         } else {
           setDisabledAll(true);
           setTextValue("");
           gContext.action = "none";
-          gContext.idTask = '';
+          gContext.idTask = "";
+          gContext.titleTask = "";
         }
       }
       setChecked(isChecked);

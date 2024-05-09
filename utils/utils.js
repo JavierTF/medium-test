@@ -126,7 +126,7 @@ export function isValidTitle(titleTask) {
  * instance or connection that is used to interact with a database. This parameter is used to perform
  * database operations such as creating a new task entry in the database.
  */
-export const createTask = async (gContext, db) => {
+export const createTask = async (gContext) => {
   if (gContext.titleTask) {
     const task = {
       id: getCurrentDateTimeAsString(),
@@ -140,6 +140,22 @@ export const createTask = async (gContext, db) => {
   } else {
     console.log("Task title is empty. Please enter a title.");
     // You can optionally set an error state or display an error message here
+  }
+};
+
+export const editTask = async (taskId, newTitle) => {
+  try {
+    if (db) {
+      const taskRef = ref(db, `/tasks/${taskId}`);
+      await update(taskRef, { title: newTitle }); // Update only the title
+
+      console.log("Task edited successfully");
+
+      // Update your UI to reflect the edited task
+    }
+  } catch (error) {
+    console.error("Error editing task:", error);
+    // Handle errors appropriately (e.g., display an error message to the user)
   }
 };
 
@@ -167,13 +183,13 @@ export const deleteTask = async (taskId) => {
 };
 
 // Ejemplo de uso
-const text = "Hola @usuario, mira este #hashtag y visita www.google.com";
-const colors2 = text.split(" ").map(changeColor);
+// const text = "Hola @usuario, mira este #hashtag y visita www.google.com";
+// const colors2 = text.split(" ").map(changeColor);
 
-console.log(colors2);
+// console.log(colors2);
 
-const color = "rgba(0, 128, 0, 1)";
-console.log(lightenColor(color));
+// const color = "rgba(0, 128, 0, 1)";
+// console.log(lightenColor(color));
 
 // export const createTask = async (
 //   id,

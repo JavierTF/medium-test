@@ -8,7 +8,8 @@ export const TaskContext = createContext({
   emailCountRef: 0,
   linkCountRef: 0,
   titleTask: '',
-  openDialog: false,
+  dialogText: '',
+  dialogSeverity: 'success',
   action: 'none',
   idTask: '',
 });
