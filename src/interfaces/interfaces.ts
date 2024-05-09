@@ -22,7 +22,7 @@ export interface InputGroupProps {
 }
 
 export interface Task {
-    id: number;
+    id: string;
     title: string;
     description: string;
     created_at: string;
@@ -35,7 +35,10 @@ export interface MyCardProps {
 
 export interface TaskContext {
     tasks: Task[];
-    emailCountRef: number;
-    linkCountRef: number;
-    titleTask: string;
+    emailCountRef?: number;
+    linkCountRef?: number;
+    titleTask?: string;
+    openDialog: boolean;
+    action: string;
+    idTask?: string;
 }

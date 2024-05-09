@@ -9,6 +9,8 @@ export const TaskContext = createContext({
   linkCountRef: 0,
   titleTask: '',
   openDialog: false,
+  action: 'none',
+  idTask: '',
 });
 
 export const TaskProvider = ({ children }) => {

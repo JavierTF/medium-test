@@ -1,4 +1,5 @@
-import { ref, set } from "firebase/database";
+import { ref, set, remove } from "firebase/database";
+import db from "../lib/firebaseSingleton";
 
 /* The `export const colors` object is defining a set of color values associated with specific types of
 words or elements. Each key in the object represents a type of word or element, and the
@@ -115,6 +116,56 @@ export function isValidTitle(titleTask) {
   );
 }
 
+/**
+ * The function `createTask` creates a new task in a database if a title is provided, otherwise it logs
+ * an error message.
+ * @param gContext - `gContext` is an object containing the context or state of the application. In
+ * this function, it is used to access the `titleTask` property which presumably holds the title of the
+ * task to be created.
+ * @param db - The `db` parameter in the `createTask` function is likely a reference to a database
+ * instance or connection that is used to interact with a database. This parameter is used to perform
+ * database operations such as creating a new task entry in the database.
+ */
+export const createTask = async (gContext, db) => {
+  if (gContext.titleTask) {
+    const task = {
+      id: getCurrentDateTimeAsString(),
+      title: gContext.titleTask,
+      created_at: new Date(),
+      finished_at: null,
+    };
+
+    const taskRef = await ref(db, "/tasks/" + task.id);
+    await set(taskRef, { ...task });
+  } else {
+    console.log("Task title is empty. Please enter a title.");
+    // You can optionally set an error state or display an error message here
+  }
+};
+
+/**
+ * The function `deleteTask` deletes a task from a database and displays a confirmation message using
+ * `alert()`.
+ * @param taskId - The `taskId` parameter in the `deleteTask` function is the unique identifier of the
+ * task that needs to be deleted from the database. It is used to locate the specific task in the
+ * database and remove it from the tasks collection.
+ */
+export const deleteTask = async (taskId) => {
+  try {
+    if (db) {
+      const taskRef = ref(db, `/tasks/${taskId}`);
+      await remove(taskRef);
+
+      console.log("Task deleted successfully");
+
+      // confirmation with alert()
+      alert('The task has been deleted successfully')
+    }
+  } catch (error) {
+    console.error("Error deleting task:", error);
+  }
+};
+
 // Ejemplo de uso
 const text = "Hola @usuario, mira este #hashtag y visita www.google.com";
 const colors2 = text.split(" ").map(changeColor);
@@ -124,25 +175,25 @@ console.log(colors2);
 const color = "rgba(0, 128, 0, 1)";
 console.log(lightenColor(color));
 
-export const createTask = async (
-  id,
-  title,
-  description,
-  created_at,
-  finished_at = null
-) => {
-  try {
-    // Crea una referencia a la nueva tarea bajo el camino "/tasks/id"
-    const taskRef = ref(db, `/tasks/${id}`);
+// export const createTask = async (
+//   id,
+//   title,
+//   description,
+//   created_at,
+//   finished_at = null
+// ) => {
+//   try {
+//     // Crea una referencia a la nueva tarea bajo el camino "/tasks/id"
+//     const taskRef = ref(db, `/tasks/${id}`);
 
-    // Establece los datos para la nueva tarea
-    await set(taskRef, { id, title, description, created_at, finished_at });
+//     // Establece los datos para la nueva tarea
+//     await set(taskRef, { id, title, description, created_at, finished_at });
 
-    // Retorna un mensaje de éxito
-    return { success: true, message: "Task created successfully" };
-  } catch (error) {
-    // Registra y retorna un mensaje de error si ocurre algún error
-    console.error("Error creating task:", error);
-    return { success: false, message: "Error creating task" };
-  }
-};
+//     // Retorna un mensaje de éxito
+//     return { success: true, message: "Task created successfully" };
+//   } catch (error) {
+//     // Registra y retorna un mensaje de error si ocurre algún error
+//     console.error("Error creating task:", error);
+//     return { success: false, message: "Error creating task" };
+//   }
+// };

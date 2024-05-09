@@ -18,17 +18,25 @@ import CloseIcon from "@mui/icons-material/Close";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import Checkbox from "@mui/material/Checkbox";
 import StringButton from "../../../components/StringButton";
-import { findById, isValidTitle } from "../../../utils/utils";
+import { findById, isValidTitle, deleteTask } from "../../../utils/utils";
 
 import { MyCardProps } from "@/interfaces/interfaces";
 import { Task } from "@/interfaces/interfaces";
 
 import db from "../../../lib/firebaseSingleton";
 import type { InferGetServerSidePropsType, GetServerSideProps } from "next";
-import { getDatabase, ref, onValue, off, set } from "firebase/database";
+import {
+  getDatabase,
+  ref,
+  onValue,
+  off,
+  set,
+  remove,
+  get,
+} from "firebase/database";
 import { fetchTasks } from "../../../lib/fetchTask";
 import { TaskContext } from "@/contexts/taskContext";
-
+import DeleteIcon from "@mui/icons-material/Delete";
 
 function MyCard({ tasks }: MyCardProps) {
   const [started, setStarted] = useState(false);
@@ -36,23 +44,15 @@ function MyCard({ tasks }: MyCardProps) {
   const [colored, setColored] = useState(true);
   const [disabledAll, setDisabledAll] = useState(true);
   const [checked, setChecked] = useState(false);
-  const [action, setAction] = useState("none");
-  
-  // const [tasks, setTasks] = useState([]);
 
-  const contexto = useContext(TaskContext);
+  const gContext = useContext(TaskContext);
 
-  useEffect(() => {
-  }, []);
+  useEffect(() => {}, []);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const data = event.target.value;
     setTextValue(data);
-    contexto.titleTask = data;
-    // if (isValidTitle(data)) {
-    //   console.log("data", data);
-    //   console.log("contexto", contexto);
-    // }
+    gContext.titleTask = data;
     setDisabledAll(data === "");
   };
 
@@ -66,10 +66,20 @@ function MyCard({ tasks }: MyCardProps) {
 
   const handleClick = () => {
     setColored(false);
-    setAction("add");
+    gContext.action = "add";
   };
 
-  const handleClickCheckbox = (idTask: number, isChecked: boolean) => {
+  const handleClickDelete = async (idTask: string) => {
+    // with no confirmation for deleting
+    console.log("borrando");
+    if (tasks && tasks.length > 0) {
+      console.log("la encontre");
+      await deleteTask(idTask);
+      setChecked(false);
+    }
+  };
+
+  const handleClickCheckbox = (idTask: string, isChecked: boolean) => {
     if (tasks && tasks.length > 0) {
       const task = findById(tasks, idTask);
       if (task) {
@@ -77,11 +87,14 @@ function MyCard({ tasks }: MyCardProps) {
           console.log(task.title);
           setDisabledAll(false);
           setTextValue(task.title);
-          setAction("modify");
+          gContext.action = "modify";
+          console.log("idTask", idTask);
+          gContext.idTask = idTask;
         } else {
           setDisabledAll(true);
           setTextValue("");
-          setAction("none");
+          gContext.action = "none";
+          gContext.idTask = '';
         }
       }
       setChecked(isChecked);
@@ -162,15 +175,22 @@ function MyCard({ tasks }: MyCardProps) {
                   direction="row"
                   spacing={1}
                   alignItems="center"
-                  // sx={{ justifyContent: "space-between", width: "99%" }}
                   key={task.id}
                 >
                   <Checkbox
+                    key={task.id}
                     onClick={(e) =>
                       handleClickCheckbox(task.id, e.target.checked)
                     }
+                    disabled={checked && task.id != gContext.idTask}
                   />
                   <StringButton text={task.title}></StringButton>
+                  <IconButton
+                    onClick={() => handleClickDelete(task.id)}
+                    disabled={checked}
+                  >
+                    <DeleteIcon color={!checked ? "primary" : "disabled"} />
+                  </IconButton>
                 </Stack>
               ))}
           </Card>
@@ -180,7 +200,7 @@ function MyCard({ tasks }: MyCardProps) {
               // height: "30px",
             }}
           >
-            <Grid container sx={{ mt: 0 }}>
+            <Grid container>
               <Grid item xl={1.3} sm={12}>
                 <DynamicButton
                   icon={<OpenInFullIcon />}
@@ -228,13 +248,6 @@ function MyCard({ tasks }: MyCardProps) {
                     url={null}
                     primary={true}
                     disabledAll={disabledAll}
-                    actionButton={
-                      !disabledAll && action == "add"
-                        ? "add"
-                        : action == "modify"
-                        ? "modify"
-                        : "none"
-                    }
                   />
                 </Stack>
               </Grid>

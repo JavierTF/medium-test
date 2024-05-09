@@ -8,7 +8,7 @@ import db from "../lib/firebaseSingleton";
 import type { InferGetServerSidePropsType, GetServerSideProps } from "next";
 import { getDatabase, ref, onValue, off, set } from "firebase/database";
 import { fetchTasks } from "../lib/fetchTask";
-import { getCurrentDateTimeAsString, isValidTitle } from "../utils/utils";
+import { getCurrentDateTimeAsString, isValidTitle, createTask } from "../utils/utils";
 import { TaskContext } from "@/contexts/taskContext";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
@@ -21,12 +21,11 @@ const DynamicButton: React.FC<DynamicButtonProps> = ({
   url = null,
   primary = false,
   disabledAll = false,
-  actionButton = "none",
 }) => {
   const [windowWidth, setWindowWidth] = useState<number>(0);
   const [open, setOpen] = useState<boolean>(false);
 
-  const contexto = useContext(TaskContext);
+  const gContext = useContext(TaskContext);
 
   useEffect(() => {
     const handleResize = () => {
@@ -45,17 +44,10 @@ const DynamicButton: React.FC<DynamicButtonProps> = ({
   const handleClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     if (primary && db) {
-      console.log("contexto.titleTask", contexto.titleTask);
-      console.log("contexto", contexto);
-      if (contexto.titleTask) {
-        let task = {
-          id: getCurrentDateTimeAsString(),
-          title: contexto.titleTask,
-          created_at: "2024-05-05T14:00:00",
-          finished_at: null,
-        };
-        const taskRef = await ref(db, "/tasks/" + task.id);
-        set(taskRef, { ...task });
+      console.log("contexto.titleTask", gContext.titleTask);
+      console.log("contexto", gContext);
+      if (gContext.titleTask) {
+        await createTask(gContext, db);
       } else {
         console.log("entre");
         setOpen(true);
@@ -96,15 +88,15 @@ const DynamicButton: React.FC<DynamicButtonProps> = ({
 
   if (primary) {
     icon = "";
-    if (actionButton == "add" && !disabledAll) {
+    if (gContext.action == "add" && !disabledAll) {
       // icon = <CloseIcon />;
       text = "Add";
     }
-    if (actionButton == "modify") {
+    if (gContext.action == "modify") {
       icon = <SaveIcon sx={{ p: 0.3 }} />;
       text = "";
     }
-    // if (actionButton == 'none') {
+    // if (contexto.action == 'none') {
     //   icon = "";
     //   text = "Ok";
     // }
@@ -130,13 +122,12 @@ const DynamicButton: React.FC<DynamicButtonProps> = ({
         {windowWidth >= 1230 && text}
       </Button>
       {open && (
-        <Snackbar open={open} autoHideDuration={3000} onClose={handleCloseSnackBar}>
+        <Snackbar open={open} autoHideDuration={5000} onClose={handleCloseSnackBar} anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
           <Alert
             onClose={handleCloseSnackBar}
             severity="error"
             variant="filled"
             sx={{ width: "100%" }}
-            key={'topcenter'}
           >
             Please, fill the field to add a new task.
           </Alert>

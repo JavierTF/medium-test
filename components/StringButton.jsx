@@ -22,7 +22,7 @@ const StringButton = ({ text }) => {
   };
 
   return (
-    <div>
+    <div style={{ width: '93%' }}>
       {words.map((word, index) => {
         const color = changeColor(word);
         updateCounter(color);
