@@ -1,4 +1,4 @@
-import { SxProps, SystemProps } from '@mui/system';
+import { SxProps } from '@mui/system';
 
 export interface DynamicButtonProps {
     icon?: React.ReactNode;
@@ -14,11 +14,6 @@ export interface DynamicButtonProps {
 export interface StringTypographyProps {
     text: string;
     sx?: SxProps;
-}
-
-export interface InputGroupProps {
-    handleClick: () => void;
-    colored: boolean;
 }
 
 export interface Task {

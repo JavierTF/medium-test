@@ -1,8 +1,6 @@
-import React, { createContext, useState, useEffect, useRef } from "react";
-import { getDatabase, ref, get } from "firebase/database";
+import React, { createContext, useState, useEffect } from "react";
+import { ref, get } from "firebase/database";
 import db from "../../lib/firebaseSingleton";
-import Task from "../interfaces/interfaces";
-// import { getTasks } from "../../utils/utils";
 
 export const TaskContext = createContext({
   tasks: null,
@@ -26,7 +24,6 @@ export const TaskProvider = ({ children }) => {
         if (tasksData) {
           const tasksArray = Object.values(tasksData);
           setTaskList(tasksArray);
-          // return tasksArray;
         }
       } catch (error) {
         console.error("Error al obtener las tareas:", error);

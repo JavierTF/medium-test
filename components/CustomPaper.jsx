@@ -2,8 +2,6 @@ import React, { useContext, useEffect, useState } from "react";
 import Paper from "@mui/material/Paper";
 import MyCard from "../src/pages/color/page";
 import { TaskContext } from "@/contexts/taskContext";
-import Snackbar from "@mui/material/Snackbar";
-import Alert from "@mui/material/Alert";
 import CustomSnackbar from "../components/CustomSnackbar";
 
 function CustomPaper({ elevation = 3, sx = {} }) {
@@ -12,16 +10,14 @@ function CustomPaper({ elevation = 3, sx = {} }) {
   const gContext = useContext(TaskContext);
 
   useEffect(() => {
-    // Update taskList and potentially trigger CustomSnackbar render
     if (gContext.taskList) {
       setTaskList(gContext.taskList);
     }
     console.log("gContext.dialogText", gContext.dialogText);
     if (gContext.dialogText && gContext.dialogText.length > 0) {
-      // More concise check for truthy dialogText
-      setOpen(true); // Set open state for Snackbar on dialogText change
+      setOpen(true);
     } else {
-      setOpen(false); // Close Snackbar if dialogText becomes empty/falsy
+      setOpen(false);
     }
   }, [gContext.taskList, gContext.dialogText, gContext]);
 

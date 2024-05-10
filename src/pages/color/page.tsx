@@ -1,14 +1,17 @@
 import React, { useState, useEffect, useContext } from "react";
+import { TaskContext } from "@/contexts/taskContext";
+
+// MUI Components
 import TextField from "@mui/material/TextField";
-import Image from "next/image";
 import IconButton from "@mui/material/IconButton";
-import StringTypography from "../../../components/StringTypography";
-import DynamicButton from "../../../components/DynamicButton";
 import Grid from "@mui/material/Grid";
 import Stack from "@mui/material/Stack";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
+import Checkbox from "@mui/material/Checkbox";
+
+// MUI Icons
 import OpenInFullIcon from "@mui/icons-material/OpenInFull";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import LockOpenIcon from "@mui/icons-material/LockOpen";
@@ -16,27 +19,21 @@ import AcUnitIcon from "@mui/icons-material/AcUnit";
 import AdjustIcon from "@mui/icons-material/Adjust";
 import CloseIcon from "@mui/icons-material/Close";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-import Checkbox from "@mui/material/Checkbox";
-import StringButton from "../../../components/StringButton";
-import { findById, isValidTitle, deleteTask } from "../../../utils/utils";
-
-import { MyCardProps } from "@/interfaces/interfaces";
-import { Task } from "@/interfaces/interfaces";
-
-import db from "../../../lib/firebaseSingleton";
-import type { InferGetServerSidePropsType, GetServerSideProps } from "next";
-import {
-  getDatabase,
-  ref,
-  onValue,
-  off,
-  set,
-  remove,
-  get,
-} from "firebase/database";
-import { fetchTasks } from "../../../lib/fetchTask";
-import { TaskContext } from "@/contexts/taskContext";
 import DeleteIcon from "@mui/icons-material/Delete";
+
+// Next.js
+import Image from "next/image";
+
+// Custom Components
+import StringTypography from "../../../components/StringTypography";
+import DynamicButton from "../../../components/DynamicButton";
+import StringButton from "../../../components/StringButton";
+
+// Utils
+import { findById, deleteTask } from "../../../utils/utils";
+
+// Interfaces
+import { MyCardProps } from "@/interfaces/interfaces";
 
 function MyCard({ tasks }: MyCardProps) {
   const [started, setStarted] = useState(false);
@@ -216,7 +213,7 @@ function MyCard({ tasks }: MyCardProps) {
             }}
           >
             <Grid container>
-              <Grid item xl={1.3} sm={12}>
+              <Grid item md={1.3} lg={1.3} xl={1.3} sm={1.3}>
                 <DynamicButton
                   icon={<OpenInFullIcon />}
                   text={"Open"}
@@ -224,7 +221,7 @@ function MyCard({ tasks }: MyCardProps) {
                   filled={true}
                 />
               </Grid>
-              <Grid item xl={9} sm={12}>
+              <Grid item md={9} lg={9} xl={9} sm={9}>
                 <Stack direction="row" spacing={1}>
                   <DynamicButton
                     icon={<CalendarTodayIcon />}
@@ -248,7 +245,7 @@ function MyCard({ tasks }: MyCardProps) {
                   />
                 </Stack>
               </Grid>
-              <Grid item xl={1.7} sm={12}>
+              <Grid item md={1.7} lg={1.7} xl={1.7} sm={1.7}>
                 <Stack direction="row" spacing={1} justifyContent={"flex-end"}>
                   <DynamicButton
                     icon={null}
@@ -273,13 +270,5 @@ function MyCard({ tasks }: MyCardProps) {
     </div>
   );
 }
-
-// export const getServerSideProps = (async () => {
-//   // Fetch data from external API
-//   const res = await fetch('https://api.github.com/repos/vercel/next.js')
-//   const Task: Task = await res.json()
-//   // Pass data to the page via props
-//   return { props: { Task } }
-// }) satisfies GetServerSideProps<{ Task: Task }>
 
 export default MyCard;
