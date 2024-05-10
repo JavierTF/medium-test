@@ -91,11 +91,11 @@ function MyCard({ tasks }: MyCardProps) {
     gContext.action = "delete";
   };
 
-  const handleClickCheckbox = (idTask: string, isChecked: boolean) => {
+  const handleClickCheckbox = (e: any, idTask: string) => {
     if (tasks && tasks.length > 0) {
       const task = findById(tasks, idTask);
       if (task) {
-        if (isChecked) {
+        if (e.target.checked) {
           console.log(task.title);
           setDisabledAll(false);
           setTextValue(task.title);
@@ -111,7 +111,7 @@ function MyCard({ tasks }: MyCardProps) {
           gContext.titleTask = "";
         }
       }
-      setChecked(isChecked);
+      setChecked(e.target.checked);
     }
   };
 
@@ -194,7 +194,7 @@ function MyCard({ tasks }: MyCardProps) {
                   <Checkbox
                     key={task.id}
                     onClick={(e) =>
-                      handleClickCheckbox(task.id, e.target.checked)
+                      handleClickCheckbox(e, task.id)
                     }
                     disabled={checked && task.id != gContext.idTask}
                   />
