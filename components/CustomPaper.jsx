@@ -28,13 +28,11 @@ function CustomPaper({ elevation = 3, sx = {} }) {
   return (
     <Paper elevation={elevation} sx={{ ...sx }}>
       <MyCard tasks={taskList} />
-      {open && (
-        <CustomSnackbar
-          open={open}
-          message={gContext.dialogText}
-          severity={gContext.dialogSeverity}
-        />
-      )}
+      <CustomSnackbar
+        open={open}
+        message={gContext.dialogText}
+        severity={gContext.dialogSeverity}
+      />
     </Paper>
   );
 }

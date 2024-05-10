@@ -2,16 +2,17 @@ import React, { createContext, useState, useEffect, useRef } from "react";
 import { getDatabase, ref, get } from "firebase/database";
 import db from "../../lib/firebaseSingleton";
 import Task from "../interfaces/interfaces";
+// import { getTasks } from "../../utils/utils";
 
 export const TaskContext = createContext({
   tasks: null,
   emailCountRef: 0,
   linkCountRef: 0,
-  titleTask: '',
-  dialogText: '',
-  dialogSeverity: 'success',
-  action: 'none',
-  idTask: '',
+  titleTask: "",
+  dialogText: "",
+  dialogSeverity: "success",
+  action: "none",
+  idTask: "",
 });
 
 export const TaskProvider = ({ children }) => {
@@ -25,7 +26,7 @@ export const TaskProvider = ({ children }) => {
         if (tasksData) {
           const tasksArray = Object.values(tasksData);
           setTaskList(tasksArray);
-          console.log("tasksArray!!!", tasksArray);
+          // return tasksArray;
         }
       } catch (error) {
         console.error("Error al obtener las tareas:", error);
@@ -41,7 +42,9 @@ export const TaskProvider = ({ children }) => {
         <TaskContext.Provider value={{ taskList }}>
           {children}
         </TaskContext.Provider>
-      ) : <div>Loading...</div>}
+      ) : (
+        <div>Loading...</div>
+      )}
     </React.Fragment>
   );
 };

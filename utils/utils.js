@@ -1,4 +1,4 @@
-import { ref, set, remove, update } from "firebase/database";
+import { ref, set, remove, update, get } from "firebase/database";
 import db from "../lib/firebaseSingleton";
 
 /* The `export const colors` object is defining a set of color values associated with specific types of
@@ -117,6 +117,23 @@ export function isValidTitle(titleTask) {
 }
 
 /**
+ * The function `getTasks` asynchronously retrieves tasks data from a Firebase Realtime Database and
+ * sets the task list with the retrieved data.
+ */
+export const getTasks = async () => {
+  try {
+    const snapshot = await get(ref(db, "/tasks"));
+    const tasksData = snapshot.val();
+    if (tasksData) {
+      const tasksArray = Object.values(tasksData);
+      return tasksArray;
+    }
+  } catch (error) {
+    console.error("Error al obtener las tareas:", error);
+  }
+};
+
+/**
  * The function `createTask` creates a new task in a database if a title is provided, otherwise it logs
  * an error message.
  * @param gContext - `gContext` is an object containing the context or state of the application. In
@@ -137,6 +154,7 @@ export const createTask = async (gContext) => {
 
     const taskRef = await ref(db, "/tasks/" + task.id);
     await set(taskRef, { ...task });
+    alert("A new task has been created!");
   } else {
     console.log("Task title is empty. Please enter a title.");
     // You can optionally set an error state or display an error message here
@@ -157,7 +175,8 @@ export const editTask = async (taskId, newTitle) => {
       const taskRef = ref(db, `/tasks/${taskId}`);
       await update(taskRef, { title: newTitle }); // Update only the title
 
-      console.log("Task edited successfully");
+      // console.log("Task edited successfully");
+      alert("Task edited successfully");
 
       // Update your UI to reflect the edited task
     }
@@ -180,7 +199,7 @@ export const deleteTask = async (taskId) => {
       const taskRef = ref(db, `/tasks/${taskId}`);
       await remove(taskRef);
 
-      console.log("Task deleted successfully");
+      // console.log("Task deleted successfully");
 
       // confirmation with alert()
       alert('The task has been deleted successfully')
@@ -198,26 +217,3 @@ export const deleteTask = async (taskId) => {
 
 // const color = "rgba(0, 128, 0, 1)";
 // console.log(lightenColor(color));
-
-// export const createTask = async (
-//   id,
-//   title,
-//   description,
-//   created_at,
-//   finished_at = null
-// ) => {
-//   try {
-//     // Crea una referencia a la nueva tarea bajo el camino "/tasks/id"
-//     const taskRef = ref(db, `/tasks/${id}`);
-
-//     // Establece los datos para la nueva tarea
-//     await set(taskRef, { id, title, description, created_at, finished_at });
-
-//     // Retorna un mensaje de éxito
-//     return { success: true, message: "Task created successfully" };
-//   } catch (error) {
-//     // Registra y retorna un mensaje de error si ocurre algún error
-//     console.error("Error creating task:", error);
-//     return { success: false, message: "Error creating task" };
-//   }
-// };
