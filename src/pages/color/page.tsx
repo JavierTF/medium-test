@@ -54,6 +54,9 @@ function MyCard({ tasks }: MyCardProps) {
     setTextValue(data);
     gContext.titleTask = data;
     setDisabledAll(data === "");
+    if (!checked) {
+      gContext.action = "add";
+    }
     if (data === "") {
       gContext.action = "none";
     }
@@ -193,9 +196,7 @@ function MyCard({ tasks }: MyCardProps) {
                 >
                   <Checkbox
                     key={task.id}
-                    onClick={(e) =>
-                      handleClickCheckbox(e, task.id)
-                    }
+                    onClick={(e) => handleClickCheckbox(e, task.id)}
                     disabled={checked && task.id != gContext.idTask}
                   />
                   <StringButton text={task.title}></StringButton>
