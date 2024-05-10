@@ -75,7 +75,7 @@ export function lightenColor(color) {
  * property matching the `idToFind` parameter.
  */
 export function findById(arr, idToFind) {
-  return arr.find(obj => obj.id === idToFind);
+  return arr.find((obj) => obj.id === idToFind);
 }
 
 /**
@@ -87,11 +87,11 @@ export function getCurrentDateTimeAsString() {
   const currentDate = new Date();
 
   const year = currentDate.getFullYear();
-  const month = String(currentDate.getMonth() + 1).padStart(2, '0'); // El mes está basado en 0, por eso sumamos 1
-  const day = String(currentDate.getDate()).padStart(2, '0');
-  const hours = String(currentDate.getHours()).padStart(2, '0');
-  const minutes = String(currentDate.getMinutes()).padStart(2, '0');
-  const seconds = String(currentDate.getSeconds()).padStart(2, '0');
+  const month = String(currentDate.getMonth() + 1).padStart(2, "0");
+  const day = String(currentDate.getDate()).padStart(2, "0");
+  const hours = String(currentDate.getHours()).padStart(2, "0");
+  const minutes = String(currentDate.getMinutes()).padStart(2, "0");
+  const seconds = String(currentDate.getSeconds()).padStart(2, "0");
 
   const formattedDateTime = `${year}-${month}-${day}_${hours}:${minutes}:${seconds}`;
 
@@ -111,8 +111,8 @@ export function isValidTitle(titleTask) {
     titleTask !== undefined &&
     titleTask !== null &&
     !Array.isArray(titleTask) &&
-    titleTask !== '0' &&
-    titleTask !== ''
+    titleTask !== "0" &&
+    titleTask !== ""
   );
 }
 
@@ -155,9 +155,9 @@ export const createTask = async (gContext) => {
     const taskRef = await ref(db, "/tasks/" + task.id);
     await set(taskRef, { ...task });
     alert("A new task has been created!");
+    location.reload();
   } else {
     console.log("Task title is empty. Please enter a title.");
-    // You can optionally set an error state or display an error message here
   }
 };
 
@@ -173,16 +173,13 @@ export const editTask = async (taskId, newTitle) => {
   try {
     if (db) {
       const taskRef = ref(db, `/tasks/${taskId}`);
-      await update(taskRef, { title: newTitle }); // Update only the title
+      await update(taskRef, { title: newTitle });
 
-      // console.log("Task edited successfully");
       alert("Task edited successfully");
-
-      // Update your UI to reflect the edited task
+      location.reload();
     }
   } catch (error) {
     console.error("Error editing task:", error);
-    // Handle errors appropriately (e.g., display an error message to the user)
   }
 };
 
@@ -198,22 +195,10 @@ export const deleteTask = async (taskId) => {
     if (db) {
       const taskRef = ref(db, `/tasks/${taskId}`);
       await remove(taskRef);
-
-      // console.log("Task deleted successfully");
-
-      // confirmation with alert()
-      alert('The task has been deleted successfully')
+      alert("The task has been deleted successfully");
+      location.reload();
     }
   } catch (error) {
     console.error("Error deleting task:", error);
   }
 };
-
-// Ejemplo de uso
-// const text = "Hola @usuario, mira este #hashtag y visita www.google.com";
-// const colors2 = text.split(" ").map(changeColor);
-
-// console.log(colors2);
-
-// const color = "rgba(0, 128, 0, 1)";
-// console.log(lightenColor(color));

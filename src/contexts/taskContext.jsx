@@ -3,7 +3,7 @@ import { ref, get } from "firebase/database";
 import db from "../../lib/firebaseSingleton";
 
 export const TaskContext = createContext({
-  tasks: null,
+  tasks: [],
   emailCountRef: 0,
   linkCountRef: 0,
   titleTask: "",

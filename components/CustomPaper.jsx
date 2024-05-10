@@ -6,7 +6,7 @@ import CustomSnackbar from "../components/CustomSnackbar";
 
 function CustomPaper({ elevation = 3, sx = {} }) {
   const [taskList, setTaskList] = useState([]);
-  const [open, setOpen] = useState(false); // Initial state for Snackbar
+//   const [open, setOpen] = useState(false); // Initial state for Snackbar
   const gContext = useContext(TaskContext);
 
   useEffect(() => {
@@ -15,9 +15,9 @@ function CustomPaper({ elevation = 3, sx = {} }) {
     }
     console.log("gContext.dialogText", gContext.dialogText);
     if (gContext.dialogText && gContext.dialogText.length > 0) {
-      setOpen(true);
+    //   setOpen(true);
     } else {
-      setOpen(false);
+    //   setOpen(false);
     }
   }, [gContext.taskList, gContext.dialogText, gContext]);
 
@@ -25,7 +25,7 @@ function CustomPaper({ elevation = 3, sx = {} }) {
     <Paper elevation={elevation} sx={{ ...sx }}>
       <MyCard tasks={taskList} />
       <CustomSnackbar
-        open={open}
+        // open={open}
         message={gContext.dialogText}
         severity={gContext.dialogSeverity}
       />
