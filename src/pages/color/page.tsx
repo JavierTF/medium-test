@@ -10,6 +10,7 @@ import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Checkbox from "@mui/material/Checkbox";
+import Skeleton from '@mui/material/Skeleton';
 
 // MUI Icons
 import OpenInFullIcon from "@mui/icons-material/OpenInFull";
@@ -82,9 +83,9 @@ function MyCard({ tasks }: MyCardProps) {
 
   const handleClickDelete = async (idTask: string) => {
     // with no confirmation for deleting
-    console.log("borrando");
+    // console.log("borrando");
     if (tasks && tasks.length > 0) {
-      console.log("la encontre");
+      // console.log("la encontre");
       await deleteTask(idTask);
       setChecked(false);
     }
@@ -96,11 +97,11 @@ function MyCard({ tasks }: MyCardProps) {
       const task = findById(tasks, idTask);
       if (task) {
         if (e.target.checked) {
-          console.log(task.title);
+          // console.log(task.title);
           setDisabledAll(false);
           setTextValue(task.title);
           gContext.action = "modify";
-          console.log("idTask", idTask);
+          // console.log("idTask", idTask);
           gContext.idTask = idTask;
           gContext.titleTask = task.title;
         } else {
@@ -182,29 +183,31 @@ function MyCard({ tasks }: MyCardProps) {
               />
             </Stack>
             {/* Lista de tareas */}
-            {tasks &&
-              tasks.length > 0 &&
+            {!tasks ? (
+              <Skeleton />
+            ) : tasks.length > 0 ? (
               tasks.map((task) => (
                 <Stack
+                  key={task.id}
                   direction="row"
                   spacing={1}
                   alignItems="center"
-                  key={task.id}
                 >
                   <Checkbox
                     key={task.id}
                     onClick={(e) => handleClickCheckbox(e, task.id)}
-                    disabled={checked && task.id != gContext.idTask}
+                    disabled={checked && task.id !== gContext.idTask}
                   />
-                  <StringButton text={task.title}></StringButton>
+                  <StringButton text={task.title} />
                   <IconButton
                     onClick={() => handleClickDelete(task.id)}
                     disabled={checked}
                   >
-                    <DeleteIcon color={!checked ? "primary" : "disabled"} />
+                    <DeleteIcon color={checked ? "disabled" : "primary"} />
                   </IconButton>
                 </Stack>
-              ))}
+              ))
+            ) : null}
           </Card>
           <CardContent
             sx={{
@@ -213,7 +216,7 @@ function MyCard({ tasks }: MyCardProps) {
             }}
           >
             <Grid container>
-              <Grid item md={1.3} lg={1.3} xl={1.3} sm={1.3}>
+              <Grid item xs={12} md={1.3} lg={1.3} xl={1.3} sm={1.3}>
                 <DynamicButton
                   icon={<OpenInFullIcon />}
                   text={"Open"}
@@ -221,7 +224,7 @@ function MyCard({ tasks }: MyCardProps) {
                   filled={true}
                 />
               </Grid>
-              <Grid item md={9} lg={9} xl={9} sm={9}>
+              <Grid item xs={12} md={9} lg={9} xl={9} sm={9}>
                 <Stack direction="row" spacing={1}>
                   <DynamicButton
                     icon={<CalendarTodayIcon />}
@@ -245,7 +248,7 @@ function MyCard({ tasks }: MyCardProps) {
                   />
                 </Stack>
               </Grid>
-              <Grid item md={1.7} lg={1.7} xl={1.7} sm={1.7}>
+              <Grid item xs={12} md={1.7} lg={1.7} xl={1.7} sm={1.7}>
                 <Stack direction="row" spacing={1} justifyContent={"flex-end"}>
                   <DynamicButton
                     icon={null}

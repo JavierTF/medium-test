@@ -157,7 +157,7 @@ export const createTask = async (gContext) => {
     alert("A new task has been created!");
     location.reload();
   } else {
-    console.log("Task title is empty. Please enter a title.");
+    // console.log("Task title is empty. Please enter a title.");
   }
 };
 

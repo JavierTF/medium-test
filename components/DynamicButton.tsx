@@ -41,7 +41,7 @@ const DynamicButton: React.FC<DynamicButtonProps> = ({
   const handleClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     if (primary && db) {
-      console.log("contexto handleCkick", gContext);
+      // console.log("contexto handleCkick", gContext);
       if (gContext.titleTask) {
         if (gContext.action == "add") {
           await createTask(gContext);
@@ -53,7 +53,7 @@ const DynamicButton: React.FC<DynamicButtonProps> = ({
         }
         gContext.dialogSeverity = "success";
       } else {
-        console.log("entre");
+        // console.log("entre");
         alert("Please, fill the field to add a new task :(");
         gContext.dialogText = "Please, fill the field to add a new task :(";
         gContext.dialogSeverity = "error";
@@ -90,7 +90,7 @@ const DynamicButton: React.FC<DynamicButtonProps> = ({
   icon = icon ?? "";
 
   if (primary) {
-    console.log('gContext.action', gContext.action)
+    // console.log('gContext.action', gContext.action)
     if (windowWidth < 1230){
       icon = <CloseIcon />;
     } else {

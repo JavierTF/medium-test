@@ -4,17 +4,19 @@ import Alert from "@mui/material/Alert";
 import { TaskContext } from "@/contexts/taskContext";
 import { SnackbarProvider } from "@/contexts/SnackbarContext";
 
-function CustomSnackbar({ message, severity }) {
-  const [open, setOpen] = useState(false);
-//   const { isOpen, setOpen } = useContext(SnackbarProvider);
+function CustomSnackbar({ open, message, severity, setOpen }) {
+  // const [open, setOpen] = useState(false);
+  //   const { isOpen, setOpen } = useContext(SnackbarProvider);
 
   const gContext = useContext(TaskContext);
 
-  useEffect(() => {
-    if (gContext.dialogText !== "" && typeof gContext.dialogText !== undefined){
-        setOpen(true)
-    }
-  }, [gContext.dialogText]);
+  console.log("message", message);
+
+  // useEffect(() => {
+  //   if (gContext.dialogText !== "" && typeof gContext.dialogText !== undefined){
+  //       setOpen(true)
+  //   }
+  // }, [gContext.dialogText]);
 
   const handleClose = () => {
     gContext.dialogText = "";
@@ -29,7 +31,7 @@ function CustomSnackbar({ message, severity }) {
       anchorOrigin={{ vertical: "top", horizontal: "center" }}
     >
       <Alert
-        open={open}
+        // open={open}
         onClose={handleClose}
         severity={severity}
         variant="filled"

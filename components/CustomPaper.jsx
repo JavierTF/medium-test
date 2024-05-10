@@ -13,22 +13,27 @@ function CustomPaper({ elevation = 3, sx = {} }) {
     if (gContext.taskList) {
       setTaskList(gContext.taskList);
     }
-    console.log("gContext.dialogText", gContext.dialogText);
-    if (gContext.dialogText && gContext.dialogText.length > 0) {
+    // console.log("gContext.dialogText", gContext.dialogText);
+    if (gContext.dialogText != "") {
+    //   console.log("okokok");
     //   setOpen(true);
     } else {
+    //   console.log("nada");
     //   setOpen(false);
     }
-  }, [gContext.taskList, gContext.dialogText, gContext]);
+  }, [gContext.taskList, gContext.dialogText]);
 
   return (
     <Paper elevation={elevation} sx={{ ...sx }}>
       <MyCard tasks={taskList} />
-      <CustomSnackbar
-        // open={open}
-        message={gContext.dialogText}
-        severity={gContext.dialogSeverity}
-      />
+      {/* {typeof gContext.dialogText != undefined && gContext.dialogText != '' && (
+        <CustomSnackbar
+          open={open}
+          message={gContext.dialogText}
+          severity={gContext.dialogSeverity}
+          setOpen={setOpen}
+        />
+      )} */}
     </Paper>
   );
 }
