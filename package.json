@@ -1,6 +1,6 @@
 {
-  "name": "medium-test",
-  "version": "0.1.0",
+  "name": "medium-test-javier-toussent-fis",
+  "version": "1.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -28,5 +28,5 @@
     "eslint-config-next": "14.2.3",
     "typescript": "^5"
   },
-  "author": "Sr. Javier Toussent Fis <javiertoussentfis@gmail.com>"
+  "author": "Sr. Fullstack Javier Toussent Fis <javiertoussentfis@gmail.com>"
 }
