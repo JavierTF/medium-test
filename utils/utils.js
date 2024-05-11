@@ -13,6 +13,31 @@ export const colors = {
 };
 
 /**
+ * The isValidLink function checks if a given word is a valid URL link starting with "http://" or
+ * "https://" or "www.".
+ * @param word - The `isValidLink` function checks if the given `word` is a valid link. It uses regular
+ * expressions to match patterns of URLs starting with `http://` or `https://` followed by
+ * non-whitespace characters, or URLs starting with `www.` followed by non-whitespace characters.
+ * @returns The `isValidLink` function is being returned. It checks if the input `word` contains a
+ * valid URL starting with `http://`, `https://`, or `www.`.
+ */
+export const isValidLink = (word) => {
+  return /\bhttps?:\/\/\S+\b/.test(word) || /\bwww\.\S+\b/.test(word);
+};
+
+/**
+ * The isValidEmail function checks if a given word is a valid email address.
+ * @param word - The `isValidEmail` function takes a string `word` as a parameter and checks if it is a
+ * valid email address format. It uses a regular expression to validate the email format.
+ * @returns The function `isValidEmail` is being returned. It takes a string input `word` and checks if
+ * it matches the pattern of a valid email address using a regular expression. The function returns a
+ * boolean value indicating whether the input string is a valid email address or not.
+ */
+export const isValidEmail = (word) => {
+  return /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b/.test(word);
+};
+
+/**
  * The function `changeColor` takes a word as input and returns a color based on certain conditions
  * such as starting with '@', '#', being a link, an email, or default color.
  * @param word - The `changeColor` function takes a word as input and checks if the word matches
@@ -29,9 +54,9 @@ export function changeColor(word) {
     return colors["@"];
   } else if (word.startsWith("#")) {
     return colors["#"];
-  } else if (/\bhttps?:\/\/\S+\b/.test(word) || /\bwww\.\S+\b/.test(word)) {
+  } else if (isValidLink(word)) {
     return colors["link"];
-  } else if (/\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b/.test(word)) {
+  } else if (isValidEmail(word)) {
     return colors["email"];
   } else {
     return colors["default"];
@@ -202,3 +227,82 @@ export const deleteTask = async (taskId) => {
     console.error("Error deleting task:", error);
   }
 };
+
+export const counters = { emailCount: undefined, linkCount: undefined };
+
+export const counterSingleton = (() => {
+
+  const getInstance = () => {
+    if (counters.emailCount === undefined) {
+      counters.emailCount = 0;
+    }
+    if (counters.linkCount === undefined) {
+      counters.linkCount = 0;
+    }
+
+    return {
+      getCounters: (word) => (
+        isValidLink(word) ? counters.linkCount : isValidEmail(word) ? counters.emailCount : null
+      ),
+      incrementCounter: (word) => {
+        isValidLink(word) ? counters.linkCount++ : isValidEmail(word) ? counters.emailCount++ : null
+      },
+      resetCounters: () => {
+        linkCounter = 0;
+        emailCounter = 0;
+        return { link: counters.linkCount, email: counters.emailCount };
+      },
+    };
+  };
+
+  return getInstance();
+})();
+
+export const countWords = (words) => {
+  const wordCounts = [];
+
+  // let emailCount = 0;
+  // let linkCount = 0;
+
+  for (const word of words) {
+    // const color = changeColor(word);
+
+    if (isValidEmail(word)) {
+      emailCount = counterSingleton.incrementCounter("email");
+    } else if (isValidLink(word)) {
+      linkCount = counterSingleton.incrementCounter("link");
+    }
+
+    const wordCount = isValidLink(word)
+      ? counterSingleton.getCounters("link")
+      : isValidEmail(word)
+      ? counterSingleton.getCounters("email")
+      : null;
+
+    wordCounts.push([word, wordCount]);
+  }
+
+  console.log(`Total email count: ${emailCount}`);
+  console.log(`Total link count: ${linkCount}`);
+
+  return wordCounts;
+};
+
+const getWordCounters = (words) => {
+  // const counters = counterSingleton.getCounters();
+  // console.log("counters", counters);
+  return words.map((word) => {
+    if (isValidLink(word)){
+      return [word, counterSingleton.incrementCounter('link')];
+    } else if(isValidEmail(word)) {
+      return [word, counterSingleton.incrementCounter('email')];
+    } else {
+      return [word, null];
+    }
+  });
+};
+
+// Ejemplo de uso
+const words = ["asdhasd@dsdfs.com", "@sdfsdf", 'www.google.com', "asdhasd@dsdfs.com", "#prueba"];
+const wordCounters = getWordCounters(words);
+console.log('contador', wordCounters);

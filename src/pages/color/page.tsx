@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import { TaskContext } from "@/contexts/taskContext";
 
 // MUI Components
@@ -10,7 +10,7 @@ import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Checkbox from "@mui/material/Checkbox";
-import Skeleton from '@mui/material/Skeleton';
+import Skeleton from "@mui/material/Skeleton";
 
 // MUI Icons
 import OpenInFullIcon from "@mui/icons-material/OpenInFull";
@@ -31,7 +31,7 @@ import DynamicButton from "../../../components/DynamicButton";
 import StringButton from "../../../components/StringButton";
 
 // Utils
-import { findById, deleteTask } from "../../../utils/utils";
+import { findById, deleteTask, colors } from "../../../utils/utils";
 
 // Interfaces
 import { MyCardProps } from "@/interfaces/interfaces";
@@ -42,10 +42,38 @@ function MyCard({ tasks }: MyCardProps) {
   const [colored, setColored] = useState(true);
   const [disabledAll, setDisabledAll] = useState(true);
   const [checked, setChecked] = useState(false);
+  const [windowWidth, setWindowWidth] = useState<number>(0);
 
   const gContext = useContext(TaskContext);
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+
+    handleResize();
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  const emailCountRef = useRef(0);
+  const linkCountRef = useRef(0);
+
+  // useEffect(() => {
+
+  // }, [tasks]);
+
+  // const updateCounter = (color: string) => {
+  //   if (color === colors['email']) {
+  //     emailCountRef.current += 1;
+  //   } else if (color === colors['link']) {
+  //     linkCountRef.current += 1;
+  //   }
+  // };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const data = event.target.value;
@@ -216,7 +244,15 @@ function MyCard({ tasks }: MyCardProps) {
             }}
           >
             <Grid container>
-              <Grid item xs={12} md={1.3} lg={1.3} xl={1.3} sm={1.3}>
+              <Grid
+                item
+                xs={2}
+                md={1.3}
+                lg={1.3}
+                xl={1.3}
+                sm={1.3}
+                sx={windowWidth < 420 ? { pb: 1, mr: 1, justifyContent: 'left' }: {}}
+              >
                 <DynamicButton
                   icon={<OpenInFullIcon />}
                   text={"Open"}
@@ -224,7 +260,7 @@ function MyCard({ tasks }: MyCardProps) {
                   filled={true}
                 />
               </Grid>
-              <Grid item xs={12} md={9} lg={9} xl={9} sm={9}>
+              <Grid item xs={9.7} md={9} lg={9} xl={9} sm={9} sx={windowWidth < 420 ? { pb: 1, justifyContent: 'right' }: {}}>
                 <Stack direction="row" spacing={1}>
                   <DynamicButton
                     icon={<CalendarTodayIcon />}

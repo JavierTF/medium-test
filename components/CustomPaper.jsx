@@ -1,12 +1,14 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState, Suspense } from "react";
 import Paper from "@mui/material/Paper";
 import MyCard from "../src/pages/color/page";
 import { TaskContext } from "@/contexts/taskContext";
 import CustomSnackbar from "../components/CustomSnackbar";
+import Skeleton from "@mui/material/Skeleton";
+import LinearProgress from "@mui/material/LinearProgress";
 
 function CustomPaper({ elevation = 3, sx = {} }) {
-  const [taskList, setTaskList] = useState([]);
-//   const [open, setOpen] = useState(false); // Initial state for Snackbar
+  const [taskList, setTaskList] = useState(null);
+  //   const [open, setOpen] = useState(false); // Initial state for Snackbar
   const gContext = useContext(TaskContext);
 
   useEffect(() => {
@@ -15,17 +17,18 @@ function CustomPaper({ elevation = 3, sx = {} }) {
     }
     // console.log("gContext.dialogText", gContext.dialogText);
     if (gContext.dialogText != "") {
-    //   console.log("okokok");
-    //   setOpen(true);
+      //   console.log("okokok");
+      //   setOpen(true);
     } else {
-    //   console.log("nada");
-    //   setOpen(false);
+      //   console.log("nada");
+      //   setOpen(false);
     }
   }, [gContext.taskList, gContext.dialogText]);
 
   return (
     <Paper elevation={elevation} sx={{ ...sx }}>
-      <MyCard tasks={taskList} />
+      {!taskList ? <LinearProgress /> : <MyCard tasks={taskList} />}
+
       {/* {typeof gContext.dialogText != undefined && gContext.dialogText != '' && (
         <CustomSnackbar
           open={open}

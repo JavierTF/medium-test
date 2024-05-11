@@ -92,7 +92,13 @@ const DynamicButton: React.FC<DynamicButtonProps> = ({
   if (primary) {
     // console.log('gContext.action', gContext.action)
     if (windowWidth < 1230){
-      icon = <CloseIcon />;
+      if (windowWidth < 420) {
+        icon = <SaveIcon sx={{ p: 0.3 }} />;
+      }
+      if (gContext.action == "none" || disabledAll) {
+        // text = "Add";      
+        icon = <CloseIcon />;
+      }
     } else {
       icon = "";
       if (gContext.action == "add" && !disabledAll) {

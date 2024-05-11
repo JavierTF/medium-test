@@ -1,68 +1,76 @@
-import React, { useRef } from 'react';
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
-import { colors, changeColor, lightenColor } from '../utils/utils.js';
-import MailOutlineIcon from '@mui/icons-material/MailOutline';
-import NumbersIcon from '@mui/icons-material/Numbers';
-import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
-import AnimationIcon from '@mui/icons-material/Animation';
+import React, { useContext, useEffect } from "react";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
+import { colors, changeColor, lightenColor, counterSingleton } from "../utils/utils.js";
+import MailOutlineIcon from "@mui/icons-material/MailOutline";
+import NumbersIcon from "@mui/icons-material/Numbers";
+import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
+import AnimationIcon from "@mui/icons-material/Animation";
+import { TaskContext } from "@/contexts/taskContext";
 
 const StringButton = ({ text }) => {
-  const words = text.split(' ');
+  const words = text.split(" ");
+  const gContext = useContext(TaskContext);
 
-  const emailCountRef = useRef(0);
-  const linkCountRef = useRef(0);
-
-  const updateCounter = (color) => {
-    if (color === colors['email']) {
-      emailCountRef.current += 1;
-    } else if (color === colors['link']) {
-      linkCountRef.current += 1;
-    }
-  };
+  useEffect(() => {
+    // Solo actualizar contadores cuando el texto cambie
+    // y no en cada renderizado del componente
+    words.forEach(word => {
+      if (word.toLowerCase() === "link") {
+        // gContext.updateLinkCount(gContext.linkCounter.count + 1);
+        gContext.updateLinkCount();
+      } else if (word.toLowerCase() === "mail") {
+        gContext.updateEmailCount();
+        // gContext.updateEmailCount(gContext.emailCounter.count + 1);
+      }
+    });
+  }, [text]); // Dependencia actualizada: solo se ejecutará cuando cambie el texto
 
   return (
-    <div style={{ width: '93%' }}>
+    <div style={{ width: "93%" }}>
       {words.map((word, index) => {
         const color = changeColor(word);
-        updateCounter(color);
+        let icon = null;
+        let displayText = word;
+
+        if (color === colors["email"]) {
+          icon = <MailOutlineIcon />;
+          displayText = `Mail ${gContext.emailCounter.count}`; // Mostrar contador de email
+          gContext.updateEmailCount(); // Incrementar contador de email
+          // gContext.updateEmailCount(gContext.emailCounter.count + 1); // Incrementar contador de email
+        } else if (color === colors["link"]) {
+          icon = <AnimationIcon />;
+          displayText = `Link ${gContext.linkCounter.count}`; // Mostrar contador de link
+          // gContext.updateLinkCount(gContext.linkCounter.count + 1); // Incrementar contador de link
+          gContext.updateLinkCount(); // Incrementar contador de link
+        } else if (color === colors["#"]) {
+          icon = <NumbersIcon />;
+        } else if (color === colors["@"]) {
+          icon = <AlternateEmailIcon />;
+        }
+
         return (
           <React.Fragment key={index}>
-            {color === colors['default'] ? (
-              <Typography variant="caption" sx={{ fontSize: 14 }}>{word}</Typography>
+            {color === colors["default"] ? (
+              <Typography variant="caption" sx={{ fontSize: 14 }}>
+                {word}
+              </Typography>
             ) : (
-                <Button
-                key={index}
+              <Button
                 variant="text"
                 sx={{
                   backgroundColor: lightenColor(color),
-                  borderRadius: '25px',
+                  borderRadius: "25px",
                   color: color,
                   py: 0.2,
                   fontSize: 12,
                 }}
-                startIcon={
-                    color === colors['link']
-                    ? <AnimationIcon />
-                    : color === colors['email']
-                    ? <MailOutlineIcon />
-                    : color === colors['#']
-                    ? <NumbersIcon />
-                    : color === colors['@']
-                    ? <AlternateEmailIcon />
-                    : null
-                }
+                startIcon={icon}
               >
-                {
-                    color === colors['link']
-                    ? `Link ${linkCountRef.current}`
-                    : color === colors['email']
-                    ? `Mail ${emailCountRef.current}`
-                    : word.slice(1)
-                }
+                {displayText}
               </Button>
             )}
-            {index !== words.length - 1 && ' '}
+            {index !== words.length - 1 && " "}
           </React.Fragment>
         );
       })}

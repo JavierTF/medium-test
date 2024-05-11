@@ -1,11 +1,14 @@
-import React, { createContext, useState, useEffect } from "react";
+import React, { createContext, useState, useEffect, useRef } from "react";
 import { ref, get } from "firebase/database";
 import db from "../../lib/firebaseSingleton";
+import LinearProgress from "@mui/material/LinearProgress";
 
 export const TaskContext = createContext({
   tasks: [],
-  emailCountRef: 0,
-  linkCountRef: 0,
+  emailCounter: {},
+  linkCounter: {},
+  updateEmailCount: () => {},
+  updateLinkCount: () => {},
   titleTask: "",
   dialogText: "",
   dialogSeverity: "success",
@@ -15,6 +18,16 @@ export const TaskContext = createContext({
 
 export const TaskProvider = ({ children }) => {
   const [taskList, setTaskList] = useState([]);
+  const emailCounter = useRef({ count: 0 }); // Convertir a useRef
+  const linkCounter = useRef({ count: 0 }); // Convertir a useRef
+
+  const updateEmailCount = () => {
+    emailCounter.current.count += 1; // Actualizar emailCounter con useRef
+  };
+
+  const updateLinkCount = () => {
+    linkCounter.current.count += 1; // Actualizar linkCounter con useRef
+  };
 
   useEffect(() => {
     const getTasks = async () => {
@@ -36,11 +49,24 @@ export const TaskProvider = ({ children }) => {
   return (
     <React.Fragment>
       {taskList ? (
-        <TaskContext.Provider value={{ taskList }}>
+        <TaskContext.Provider
+          value={{
+            taskList,
+            emailCounter: emailCounter.current, // Acceder al valor actual de useRef
+            linkCounter: linkCounter.current, // Acceder al valor actual de useRef
+            updateEmailCount,
+            updateLinkCount,
+            titleTask: "",
+            dialogText: "",
+            dialogSeverity: "success",
+            action: "none",
+            idTask: "",
+          }}
+        >
           {children}
         </TaskContext.Provider>
       ) : (
-        <div>Loading...</div>
+        <LinearProgress />
       )}
     </React.Fragment>
   );
