@@ -29,6 +29,9 @@ note: Users within Cuba must turn on a VPN for the app to access Firebase.
 3. Start the application `npm run dev`.
 4. Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
+# Test
+1. npx jest
+
 ## Project's structure
 note: Some files and the real jsx and tsx extensions were ignored (it has been declared .jsx for every file here)
 
