@@ -13,6 +13,7 @@ import Checkbox from "@mui/material/Checkbox";
 import Skeleton from "@mui/material/Skeleton";
 import Tooltip from "@mui/material/Tooltip";
 
+
 // MUI Icons
 import OpenInFullIcon from "@mui/icons-material/OpenInFull";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
@@ -341,6 +342,7 @@ function MyCard({ tasks }: MyCardProps) {
               </Grid>
             </Grid>
           </CardContent>
+          
           {/* CustomSnackbar Component */}
           {open && (
             <CustomSnackbar
