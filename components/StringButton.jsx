@@ -23,29 +23,12 @@ const StringButton = ({ text, emailRef, linkRef }) => {
   const getEmailCount = useMemo(() => emailRef.current, [emailRef]);
   const getLinkCount = useMemo(() => linkRef.current, [linkRef]);
 
-  // useEffect(() => {
-  //   emailRef.current += 1;
-  // }, [emailRef]);
-
-  // useEffect(() => {
-  //   linkRef.current += 1;
-  // }, [linkRef]);
-
   const wordCounters = [];
 
   for (let i = 0; i < words.length; i++) {
     if (isValidEmail(words[i])) {
       wordCounters.push([words[i], getEmailCount]);
-      console.log('getEmailCount', getEmailCount)
       emailRef.current += 1;
-      console.log('emailRef.current', getEmailCount)
-
-      // console.log('getEmailCount', getEmailCount + 1);
-      // console.log('newEmail', emailRef.current);
-      // let newEmail = getEmailCount - 1;
-      // if (newEmail + 1 == getEmailCount + 1) {
-      //   emailRef.current += 1;
-      // }
     } else if (isValidLink(words[i])) {
       wordCounters.push([words[i], getLinkCount]);
       linkRef.current += 1;
