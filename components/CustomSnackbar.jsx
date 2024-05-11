@@ -3,6 +3,7 @@ import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
 import { TaskContext } from "@/contexts/taskContext";
 import { SnackbarProvider } from "@/contexts/SnackbarContext";
+import { refreshAfter } from "../utils/utils";
 
 function CustomSnackbar({ open, message, severity, setOpen }) {
   // const [open, setOpen] = useState(false);
@@ -18,9 +19,10 @@ function CustomSnackbar({ open, message, severity, setOpen }) {
   //   }
   // }, [gContext.dialogText]);
 
-  const handleClose = () => {
+  const handleClose = async () => {
     gContext.dialogText = "";
     setOpen(false);
+    await refreshAfter(4000);
   };
 
   return (

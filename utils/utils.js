@@ -158,6 +158,13 @@ export const getTasks = async () => {
   }
 };
 
+
+export const refreshAfter = (miliseconds) => {
+  setTimeout(() => {
+    location.reload();
+  }, miliseconds);
+}
+
 /**
  * The function `createTask` creates a new task in a database if a title is provided, otherwise it logs
  * an error message.
@@ -179,8 +186,9 @@ export const createTask = async (gContext) => {
 
     const taskRef = await ref(db, "/tasks/" + task.id);
     await set(taskRef, { ...task });
-    alert("A new task has been created!");
-    location.reload();
+    // alert("A new task has been created!");
+
+    
   } else {
     // console.log("Task title is empty. Please enter a title.");
   }
@@ -200,13 +208,14 @@ export const editTask = async (taskId, newTitle) => {
       const taskRef = ref(db, `/tasks/${taskId}`);
       await update(taskRef, { title: newTitle });
 
-      alert("Task edited successfully");
-      location.reload();
+      // alert("Task edited successfully");
+      await refreshAfter(4000);
     }
   } catch (error) {
     console.error("Error editing task:", error);
   }
 };
+
 
 /**
  * The function `deleteTask` deletes a task from a database and displays a confirmation message using
@@ -220,82 +229,113 @@ export const deleteTask = async (taskId) => {
     if (db) {
       const taskRef = ref(db, `/tasks/${taskId}`);
       await remove(taskRef);
-      alert("The task has been deleted successfully");
-      location.reload();
+      // alert("The task has been deleted successfully");
+      await refreshAfter(4000);
     }
   } catch (error) {
     console.error("Error deleting task:", error);
   }
 };
 
-export const counters = { emailCount: undefined, linkCount: undefined };
+// export const counters = { emailCount: undefined, linkCount: undefined };
 
-export const counterSingleton = (() => {
+// export const counterSingleton = (() => {
+//   const counters = {
+//     emailCount: 0,
+//     linkCount: 0
+//   };
 
-  const getInstance = () => {
-    if (counters.emailCount === undefined) {
-      counters.emailCount = 0;
-    }
-    if (counters.linkCount === undefined) {
-      counters.linkCount = 0;
-    }
+//   const getInstance = () => {
+//     if (counters.emailCount === undefined) {
+//       counters.emailCount = 0;
+//     }
+//     if (counters.linkCount === undefined) {
+//       counters.linkCount = 0;
+//     }
 
-    return {
-      getCounters: (word) => (
-        isValidLink(word) ? counters.linkCount : isValidEmail(word) ? counters.emailCount : null
-      ),
-      incrementCounter: (word) => {
-        isValidLink(word) ? counters.linkCount++ : isValidEmail(word) ? counters.emailCount++ : null
-      },
-      resetCounters: () => {
-        linkCounter = 0;
-        emailCounter = 0;
-        return { link: counters.linkCount, email: counters.emailCount };
-      },
-    };
-  };
+//     return {
+//       getCounters: (word) => (
+//         isValidLink(word) ? counters.linkCount : isValidEmail(word) ? counters.emailCount : null
+//       ),
+//       incrementCounter: (word) => {
+//         isValidLink(word) ? counters.linkCount++ : isValidEmail(word) ? counters.emailCount++ : null;
+//       },
+//       resetCounters: () => {
+//         counters.linkCount = 0;
+//         counters.emailCount = 0;
+//         return { link: counters.linkCount, email: counters.emailCount };
+//       },
+//     };
+//   };
 
-  return getInstance();
-})();
+//   return getInstance();
+// })();
 
-export const countWords = (words) => {
-  const wordCounts = [];
+// export const countWords = (words) => {
+//   const wordCounts = [];
 
-  // let emailCount = 0;
-  // let linkCount = 0;
+//   // let emailCount = 0;
+//   // let linkCount = 0;
 
-  for (const word of words) {
-    // const color = changeColor(word);
+//   for (const word of words) {
+//     // const color = changeColor(word);
 
-    if (isValidEmail(word)) {
-      emailCount = counterSingleton.incrementCounter("email");
-    } else if (isValidLink(word)) {
-      linkCount = counterSingleton.incrementCounter("link");
-    }
+//     if (isValidEmail(word)) {
+//       emailCount = counterSingleton.incrementCounter("email");
+//     } else if (isValidLink(word)) {
+//       linkCount = counterSingleton.incrementCounter("link");
+//     }
 
-    const wordCount = isValidLink(word)
-      ? counterSingleton.getCounters("link")
-      : isValidEmail(word)
-      ? counterSingleton.getCounters("email")
-      : null;
+//     const wordCount = isValidLink(word)
+//       ? counterSingleton.getCounters("link")
+//       : isValidEmail(word)
+//       ? counterSingleton.getCounters("email")
+//       : null;
 
-    wordCounts.push([word, wordCount]);
+//     wordCounts.push([word, wordCount]);
+//   }
+
+//   console.log(`Total email count: ${emailCount}`);
+//   console.log(`Total link count: ${linkCount}`);
+
+//   return wordCounts;
+// };
+
+const updateEmailCounter = () => {
+  const storedEmailCounter = localStorage.getItem("emailCounter");
+
+  if (storedEmailCounter === null) {
+    localStorage.setItem("emailCounter", parseInt(1));
+    return 1;
+  } else {
+    const newEmailCounter = parseInt(storedEmailCounter) + 1;
+    localStorage.setItem("emailCounter", newEmailCounter);
+    return newEmailCounter;
   }
-
-  console.log(`Total email count: ${emailCount}`);
-  console.log(`Total link count: ${linkCount}`);
-
-  return wordCounts;
 };
 
-const getWordCounters = (words) => {
+const updateLinkCounter = () => {
+  const storedLinkCounter = localStorage.getItem("linkCounter");
+
+  if (storedLinkCounter === null) {
+    localStorage.setItem("linkCounter", parseInt(1));
+    return 1;
+  } else {
+    const newLinkCounter = parseInt(storedLinkCounter) + 1;
+    localStorage.setItem("linkCounter", newLinkCounter);
+    console.log("newLinkCounter", newLinkCounter);
+    return newLinkCounter;
+  }
+};
+
+export const getWordCounters = (words) => {
   // const counters = counterSingleton.getCounters();
   // console.log("counters", counters);
   return words.map((word) => {
-    if (isValidLink(word)){
-      return [word, counterSingleton.incrementCounter('link')];
-    } else if(isValidEmail(word)) {
-      return [word, counterSingleton.incrementCounter('email')];
+    if (isValidLink(word)) {
+      return [word, updateLinkCounter()];
+    } else if (isValidEmail(word)) {
+      return [word, updateEmailCounter()];
     } else {
       return [word, null];
     }
@@ -303,6 +343,69 @@ const getWordCounters = (words) => {
 };
 
 // Ejemplo de uso
-const words = ["asdhasd@dsdfs.com", "@sdfsdf", 'www.google.com', "asdhasd@dsdfs.com", "#prueba"];
-const wordCounters = getWordCounters(words);
-console.log('contador', wordCounters);
+const words = [
+  "asdhasd@dsdfs.com",
+  "https://www.asd.com",
+  "www.google.com",
+  "asdhasd@dsdfs.com",
+  "#prueba",
+  "asd34hasd@dsdfs.com",
+];
+
+// if (
+//   localStorage.getItem("linkCounter") === null &&
+//   localStorage.getItem("emailCounter") === null
+// ) {
+//   const wordCounters = getWordCounters(words);
+//   console.log("wordCounters", wordCounters);
+// }
+
+// const getWordCountersSingleton = () => {
+//   const initializeCounters = () => {
+//     if (
+//       localStorage.getItem("linkCounter") === null &&
+//       localStorage.getItem("emailCounter") === null
+//     ) {
+//       const wordCounters = getWordCounters(words);
+//       localStorage.setItem(
+//         "linkCounter",
+//         wordCounters
+//           .filter(
+//             ([_, counter]) =>
+//               counter !== null && typeof counter === "number" && !isNaN(counter)
+//           )
+//           .reduce(
+//             (acc, [word, counter]) =>
+//               word.toLowerCase() === "link" ? acc + counter : acc,
+//             0
+//           )
+//       );
+//       localStorage.setItem(
+//         "emailCounter",
+//         wordCounters
+//           .filter(
+//             ([_, counter]) =>
+//               counter !== null && typeof counter === "number" && !isNaN(counter)
+//           )
+//           .reduce(
+//             (acc, [word, counter]) =>
+//               word.toLowerCase() === "mail" ? acc + counter : acc,
+//             0
+//           )
+//       );
+//     }
+//   };
+
+//   initializeCounters();
+
+//   return {
+//     getStoredWordCounters: () => ({
+//       email: parseInt(localStorage.getItem("emailCounter")) || 0,
+//       link: parseInt(localStorage.getItem("linkCounter")) || 0,
+//     }),
+//   };
+// };
+
+// // Ejemplo de uso
+// const wordCounters = getWordCountersSingleton().getStoredWordCounters();
+// console.log(wordCounters); // { email: 2, link: 3 }

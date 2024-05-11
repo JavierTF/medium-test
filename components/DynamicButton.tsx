@@ -4,12 +4,9 @@ import { DynamicButtonProps } from "@/interfaces/interfaces";
 import CloseIcon from "@mui/icons-material/Close";
 import SaveIcon from "@mui/icons-material/Save";
 import db from "../lib/firebaseSingleton";
-import {
-  isValidTitle,
-  createTask,
-  editTask,
-} from "../utils/utils";
+import { isValidTitle, createTask, editTask } from "../utils/utils";
 import { TaskContext } from "@/contexts/taskContext";
+import CustomSnackbar from "../components/CustomSnackbar";
 
 const DynamicButton: React.FC<DynamicButtonProps> = ({
   icon,
@@ -21,6 +18,8 @@ const DynamicButton: React.FC<DynamicButtonProps> = ({
   disabledAll = false,
 }) => {
   const [windowWidth, setWindowWidth] = useState<number>(0);
+  const [date, setDate] = useState(new Date());
+  const [open, setOpen] = useState(false);
 
   const gContext = useContext(TaskContext);
 
@@ -38,6 +37,17 @@ const DynamicButton: React.FC<DynamicButtonProps> = ({
     };
   }, []);
 
+  useEffect(() => {
+    console.log("gContext.dialogText", gContext.dialogText);
+    if (gContext.dialogText != "") {
+      console.log("okokok");
+      //   setOpen(true);
+    } else {
+      //   console.log("nada");
+      //   setOpen(false);
+    }
+  }, [gContext.dialogText, date]);
+
   const handleClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     if (primary && db) {
@@ -46,19 +56,24 @@ const DynamicButton: React.FC<DynamicButtonProps> = ({
         if (gContext.action == "add") {
           await createTask(gContext);
           gContext.dialogText = "A new task has been created!";
+          setDate(new Date());
+          setOpen(true);
         }
         if (gContext.action == "modify") {
           await editTask(gContext.idTask, gContext.titleTask);
           gContext.dialogText = `The task ${gContext.idTask} has been modified!`;
+          setDate(new Date());
+          setOpen(true);
         }
         gContext.dialogSeverity = "success";
       } else {
         // console.log("entre");
-        alert("Please, fill the field to add a new task :(");
+        // alert("Please, fill the field to add a new task :(");
         gContext.dialogText = "Please, fill the field to add a new task :(";
         gContext.dialogSeverity = "error";
+        setDate(new Date());
+        setOpen(true);
       }
-      
     }
   };
 
@@ -91,18 +106,18 @@ const DynamicButton: React.FC<DynamicButtonProps> = ({
 
   if (primary) {
     // console.log('gContext.action', gContext.action)
-    if (windowWidth < 1230){
+    if (windowWidth < 1230) {
       if (windowWidth < 420) {
         icon = <SaveIcon sx={{ p: 0.3 }} />;
       }
       if (gContext.action == "none" || disabledAll) {
-        // text = "Add";      
+        // text = "Add";
         icon = <CloseIcon />;
       }
     } else {
       icon = "";
       if (gContext.action == "add" && !disabledAll) {
-        text = "Add";      
+        text = "Add";
       }
       if (gContext.action == "modify") {
         icon = <SaveIcon sx={{ p: 0.3 }} />;
@@ -123,6 +138,14 @@ const DynamicButton: React.FC<DynamicButtonProps> = ({
       >
         {windowWidth >= 1230 && text}
       </Button>
+      {open && (
+        <CustomSnackbar
+          open={open}
+          message={gContext.dialogText}
+          severity={gContext.dialogSeverity}
+          setOpen={setOpen}
+        />
+      )}
     </div>
   );
 };
