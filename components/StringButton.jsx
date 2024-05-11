@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useMemo } from "react";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import {
@@ -19,33 +19,45 @@ import { TaskContext } from "@/contexts/taskContext";
 
 const StringButton = ({ text, emailRef, linkRef }) => {
   const words = text.split(" ");
-  // const wordCounters = getWordCounters(words);
+
+  const getEmailCount = useMemo(() => emailRef.current, [emailRef]);
+  const getLinkCount = useMemo(() => linkRef.current, [linkRef]);
+
+  // useEffect(() => {
+  //   emailRef.current += 1;
+  // }, [emailRef]);
+
+  // useEffect(() => {
+  //   linkRef.current += 1;
+  // }, [linkRef]);
 
   const wordCounters = [];
-  for (const wor in words) {
-    if (isValidEmail) {
+
+  for (let i = 0; i < words.length; i++) {
+    if (isValidEmail(words[i])) {
+      wordCounters.push([words[i], getEmailCount]);
+      console.log('getEmailCount', getEmailCount)
       emailRef.current += 1;
-      wordCounters.push([wor, emailRef.current]);
-    } else if (isValidLink){
+      console.log('emailRef.current', getEmailCount)
+
+      // console.log('getEmailCount', getEmailCount + 1);
+      // console.log('newEmail', emailRef.current);
+      // let newEmail = getEmailCount - 1;
+      // if (newEmail + 1 == getEmailCount + 1) {
+      //   emailRef.current += 1;
+      // }
+    } else if (isValidLink(words[i])) {
+      wordCounters.push([words[i], getLinkCount]);
       linkRef.current += 1;
-      wordCounters.push([wor, linkRef.current]);
     } else {
-      wordCounters.push([wor, null])
+      wordCounters.push([words[i], null]);
     }
   }
-
-  // if (
-  //   localStorage.getItem("linkCounter") === null &&
-  //   localStorage.getItem("emailCounter") === null
-  // ) {
-  //   const wordCounters = getWordCounters(words);
-  //   console.log("wordCounters", wordCounters);
-  // }
 
   const elements = [];
 
   for (let index = 0; index < wordCounters.length; index++) {
-    const word = wordCounters[index];
+    const word = wordCounters[index];    
     const color = changeColor(word[0]);
     let icon = null;
     let displayText = word[0];

@@ -217,7 +217,6 @@ export const editTask = async (taskId, newTitle) => {
   }
 };
 
-
 /**
  * The function `deleteTask` deletes a task from a database and displays a confirmation message using
  * `alert()`.

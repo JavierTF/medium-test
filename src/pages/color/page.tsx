@@ -21,6 +21,7 @@ import AdjustIcon from "@mui/icons-material/Adjust";
 import CloseIcon from "@mui/icons-material/Close";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import DeleteIcon from "@mui/icons-material/Delete";
+import CheckIcon from '@mui/icons-material/Check';
 
 // Next.js
 import Image from "next/image";
@@ -46,8 +47,8 @@ function MyCard({ tasks }: MyCardProps) {
   const [windowWidth, setWindowWidth] = useState<number>(0);
   const [open, setOpen] = useState(false);
 
-  const emailRef = useRef(0);
-  const linkRef = useRef(0);
+  const emailRef = useRef(1);
+  const linkRef = useRef(1);
 
   const gContext = useContext(TaskContext);
 
@@ -132,7 +133,7 @@ function MyCard({ tasks }: MyCardProps) {
 
   return (
     <div>
-      {/* {`contador ${counterRef.current}`} */}
+      {/* BeforeStarted Componente */}
       {!started && (
         <Stack
           direction="row"
@@ -151,6 +152,7 @@ function MyCard({ tasks }: MyCardProps) {
           </Box>
         </Stack>
       )}
+      {/* AfterStarted Component */}
       {started && (
         <React.Fragment>
           <Card variant="outlined" sx={{ borderRadius: "1px" }}>
@@ -197,7 +199,7 @@ function MyCard({ tasks }: MyCardProps) {
                 style={{ borderRadius: "50%", opacity: disabledAll ? 0.5 : 1 }}
               />
             </Stack>
-            {/* Lista de tareas */}
+            {/* TasksList Component */}
             {!tasks ? (
               <Skeleton />
             ) : tasks.length > 0 ? (
@@ -215,6 +217,12 @@ function MyCard({ tasks }: MyCardProps) {
                   />
                   <StringButton text={task.title} emailRef={emailRef} linkRef={linkRef}  />
                   <IconButton
+                    onClick={() => alert("The functionality will be developed soon :(")}
+                    disabled={checked}
+                  >
+                    <CheckIcon color={checked ? "disabled" : "primary"} />
+                  </IconButton>
+                  <IconButton
                     onClick={() => handleClickDelete(task.id)}
                     disabled={checked}
                   >
@@ -224,10 +232,10 @@ function MyCard({ tasks }: MyCardProps) {
               ))
             ) : null}
           </Card>
+          {/* ButtonsFooter Component */}
           <CardContent
             sx={{
               backgroundColor: "#FAFCFB",
-              // height: "30px",
             }}
           >
             <Grid container>
@@ -307,6 +315,7 @@ function MyCard({ tasks }: MyCardProps) {
               </Grid>
             </Grid>
           </CardContent>
+          {/* CustomSnackbar Component */}
           {open && (
             <CustomSnackbar
               open={open}
