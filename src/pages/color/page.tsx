@@ -29,6 +29,7 @@ import Image from "next/image";
 import StringTypography from "../../../components/StringTypography";
 import DynamicButton from "../../../components/DynamicButton";
 import StringButton from "../../../components/StringButton";
+import CustomSnackbar from "../../../components/CustomSnackbar";
 
 // Utils
 import { findById, deleteTask, colors } from "../../../utils/utils";
@@ -43,6 +44,7 @@ function MyCard({ tasks }: MyCardProps) {
   const [disabledAll, setDisabledAll] = useState(true);
   const [checked, setChecked] = useState(false);
   const [windowWidth, setWindowWidth] = useState<number>(0);
+  const [open, setOpen] = useState(false);
 
   const gContext = useContext(TaskContext);
 
@@ -60,12 +62,17 @@ function MyCard({ tasks }: MyCardProps) {
     };
   }, []);
 
-  const emailCountRef = useRef(0);
-  const linkCountRef = useRef(0);
+  // const emailCountRef = useRef(0);
+  // const linkCountRef = useRef(0);
 
   // useEffect(() => {
+  //   if (textValue === "Type to add a new task"){
+  //     setDisabledAll(true);
+  //     // setStarted(true);
+  //     // setColored(true);
+  //   }
 
-  // }, [tasks]);
+  // }, [textValue]);
 
   // const updateCounter = (color: string) => {
   //   if (color === colors['email']) {
@@ -114,10 +121,13 @@ function MyCard({ tasks }: MyCardProps) {
     // console.log("borrando");
     if (tasks && tasks.length > 0) {
       // console.log("la encontre");
+      gContext.action = "delete";
+      gContext.dialogText = "The task has been deleted! (updating...)";
+      gContext.dialogSeverity = "info";
       await deleteTask(idTask);
       setChecked(false);
+      setOpen(true);
     }
-    gContext.action = "delete";
   };
 
   const handleClickCheckbox = (e: any, idTask: string) => {
@@ -251,16 +261,29 @@ function MyCard({ tasks }: MyCardProps) {
                 lg={1.3}
                 xl={1.3}
                 sm={1.3}
-                sx={windowWidth < 420 ? { pb: 1, mr: 1, justifyContent: 'left' }: {}}
+                sx={
+                  windowWidth < 420
+                    ? { pb: 1, mr: 1, justifyContent: "left" }
+                    : {}
+                }
               >
                 <DynamicButton
                   icon={<OpenInFullIcon />}
                   text={"Open"}
                   disabled={disabledAll}
                   filled={true}
+                  setOpen={setOpen}
                 />
               </Grid>
-              <Grid item xs={9.7} md={9} lg={9} xl={9} sm={9} sx={windowWidth < 420 ? { pb: 1, justifyContent: 'right' }: {}}>
+              <Grid
+                item
+                xs={9.7}
+                md={9}
+                lg={9}
+                xl={9}
+                sm={9}
+                sx={windowWidth < 420 ? { pb: 1, justifyContent: "right" } : {}}
+              >
                 <Stack direction="row" spacing={1}>
                   <DynamicButton
                     icon={<CalendarTodayIcon />}
@@ -291,6 +314,8 @@ function MyCard({ tasks }: MyCardProps) {
                     text={"Cancel"}
                     filled={true}
                     url={null}
+                    setTextValue={setTextValue}
+                    setDisabledAll={setDisabledAll}
                   />
                   <DynamicButton
                     icon={<CloseIcon />}
@@ -299,11 +324,20 @@ function MyCard({ tasks }: MyCardProps) {
                     url={null}
                     primary={true}
                     disabledAll={disabledAll}
+                    setOpen={setOpen}
                   />
                 </Stack>
               </Grid>
             </Grid>
           </CardContent>
+          {open && (
+            <CustomSnackbar
+              open={open}
+              message={gContext.dialogText}
+              severity={gContext.dialogSeverity}
+              setOpen={setOpen}
+            />
+          )}
         </React.Fragment>
       )}
     </div>

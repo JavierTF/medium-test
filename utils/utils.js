@@ -209,7 +209,7 @@ export const editTask = async (taskId, newTitle) => {
       await update(taskRef, { title: newTitle });
 
       // alert("Task edited successfully");
-      await refreshAfter(4000);
+      await refreshAfter(3000);
     }
   } catch (error) {
     console.error("Error editing task:", error);
@@ -230,7 +230,7 @@ export const deleteTask = async (taskId) => {
       const taskRef = ref(db, `/tasks/${taskId}`);
       await remove(taskRef);
       // alert("The task has been deleted successfully");
-      await refreshAfter(4000);
+      await refreshAfter(3000);
     }
   } catch (error) {
     console.error("Error deleting task:", error);

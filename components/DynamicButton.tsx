@@ -6,7 +6,6 @@ import SaveIcon from "@mui/icons-material/Save";
 import db from "../lib/firebaseSingleton";
 import { isValidTitle, createTask, editTask } from "../utils/utils";
 import { TaskContext } from "@/contexts/taskContext";
-import CustomSnackbar from "../components/CustomSnackbar";
 
 const DynamicButton: React.FC<DynamicButtonProps> = ({
   icon,
@@ -16,11 +15,12 @@ const DynamicButton: React.FC<DynamicButtonProps> = ({
   url = null,
   primary = false,
   disabledAll = false,
+  setOpen,
+  setTextValue,
+  setDisabledAll,
 }) => {
   const [windowWidth, setWindowWidth] = useState<number>(0);
-  const [date, setDate] = useState(new Date());
-  const [open, setOpen] = useState(false);
-
+  // const [date, setDate] = useState(new Date());
   const gContext = useContext(TaskContext);
 
   useEffect(() => {
@@ -46,7 +46,7 @@ const DynamicButton: React.FC<DynamicButtonProps> = ({
       //   console.log("nada");
       //   setOpen(false);
     }
-  }, [gContext.dialogText, date]);
+  }, [gContext.dialogText]);
 
   const handleClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -55,14 +55,14 @@ const DynamicButton: React.FC<DynamicButtonProps> = ({
       if (gContext.titleTask) {
         if (gContext.action == "add") {
           await createTask(gContext);
-          gContext.dialogText = "A new task has been created!";
-          setDate(new Date());
+          gContext.dialogText = "A new task has been created! (updating...)";
+          // setDate(new Date());
           setOpen(true);
         }
         if (gContext.action == "modify") {
           await editTask(gContext.idTask, gContext.titleTask);
-          gContext.dialogText = `The task ${gContext.idTask} has been modified!`;
-          setDate(new Date());
+          gContext.dialogText = `The task ${gContext.idTask} has been modified! (updating...)`;
+          // setDate(new Date());
           setOpen(true);
         }
         gContext.dialogSeverity = "success";
@@ -71,10 +71,17 @@ const DynamicButton: React.FC<DynamicButtonProps> = ({
         // alert("Please, fill the field to add a new task :(");
         gContext.dialogText = "Please, fill the field to add a new task :(";
         gContext.dialogSeverity = "error";
-        setDate(new Date());
+        // setDate(new Date());
         setOpen(true);
       }
     }
+  };
+
+  const handleClickCancel = () => {
+    setTextValue("");
+    setDisabledAll(true);
+    gContext.dialogText = "";
+    gContext.action = "none";
   };
 
   const buttonVariant: "contained" | "outlined" = filled
@@ -134,18 +141,10 @@ const DynamicButton: React.FC<DynamicButtonProps> = ({
         href={finalUrl}
         disabled={disabled}
         sx={{ ...buttonSx, textTransform: "none" }}
-        onClick={handleClick}
+        onClick={text === "Cancel" ? handleClickCancel : handleClick}
       >
         {windowWidth >= 1230 && text}
       </Button>
-      {open && (
-        <CustomSnackbar
-          open={open}
-          message={gContext.dialogText}
-          severity={gContext.dialogSeverity}
-          setOpen={setOpen}
-        />
-      )}
     </div>
   );
 };

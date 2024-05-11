@@ -22,7 +22,9 @@ function CustomSnackbar({ open, message, severity, setOpen }) {
   const handleClose = async () => {
     gContext.dialogText = "";
     setOpen(false);
-    await refreshAfter(4000);
+    if (gContext.action != 'none' || gContext.action != ''){
+      await refreshAfter(3000);
+    }
   };
 
   return (
