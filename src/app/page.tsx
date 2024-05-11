@@ -32,37 +32,39 @@ function TaskContainer() {
               setOpen={setOpen}
             />
           )}
-          {/* Copyrights */}
-          <Typography
-            variant="subtitle2"
-            sx={{ color: "gray", pt: 3 }}
-            align="center"
-          >
-            © All rights reserved by 
-            <a
-              href="https://portfolio-javier-toussent-fis.vercel.app/"
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{ paddingLeft: "4px", textDecoration: "underline" }}
+          <div style={{ position: 'fixed', bottom: 0 }}>
+            {/* Copyrights */}
+            <Typography
+              variant="subtitle2"
+              sx={{ color: "gray", pt: 3 }}
+              align="center"
             >
-               Sr. Fullstack Javier Toussent Fis
-            </a>
-          </Typography>
+              © All rights reserved by 
+              <a
+                href="https://portfolio-javier-toussent-fis.vercel.app/"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ paddingLeft: "4px", textDecoration: "underline" }}
+              >
+                Sr. Fullstack Javier Toussent Fis
+              </a>
+            </Typography>
 
-          <Typography
-            variant="subtitle2"
-            sx={{ color: "gray", fontSize: 12 }}
-            align="center"
-          >
-            <a
-              href="https://github.com/JavierTF/medium-test"
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{ color: "#2C7FBF" }}
+            <Typography
+              variant="subtitle2"
+              sx={{ color: "gray", fontSize: 12 }}
+              align="center"
             >
-              Click to see this application code
-            </a>
-          </Typography>
+              <a
+                href="https://github.com/JavierTF/medium-test"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ color: "#2C7FBF" }}
+              >
+                Click to see this application code
+              </a>
+            </Typography>
+          </div>
         </Container>
       </Suspense>
     </TaskProvider>
