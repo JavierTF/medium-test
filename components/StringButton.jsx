@@ -8,6 +8,8 @@ import {
   counterSingleton,
   getWordCounters,
   getWordCountersSingleton,
+  isValidEmail,
+  isValidLink,
 } from "../utils/utils.js";
 import MailOutlineIcon from "@mui/icons-material/MailOutline";
 import NumbersIcon from "@mui/icons-material/Numbers";
@@ -15,9 +17,22 @@ import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
 import AnimationIcon from "@mui/icons-material/Animation";
 import { TaskContext } from "@/contexts/taskContext";
 
-const StringButton = ({ text }) => {
+const StringButton = ({ text, emailRef, linkRef }) => {
   const words = text.split(" ");
-  const wordCounters = getWordCounters(words);
+  // const wordCounters = getWordCounters(words);
+
+  const wordCounters = [];
+  for (const wor in words) {
+    if (isValidEmail) {
+      emailRef.current += 1;
+      wordCounters.push([wor, emailRef.current]);
+    } else if (isValidLink){
+      linkRef.current += 1;
+      wordCounters.push([wor, linkRef.current]);
+    } else {
+      wordCounters.push([wor, null])
+    }
+  }
 
   // if (
   //   localStorage.getItem("linkCounter") === null &&

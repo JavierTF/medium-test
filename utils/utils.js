@@ -159,6 +159,11 @@ export const getTasks = async () => {
 };
 
 
+/**
+ * The function `refreshAfter` reloads the current page after a specified number of milliseconds.
+ * @param miliseconds - The `refreshAfter` function takes a parameter `miliseconds`, which represents
+ * the time in milliseconds after which the page will be reloaded.
+ */
 export const refreshAfter = (miliseconds) => {
   setTimeout(() => {
     location.reload();
@@ -186,9 +191,7 @@ export const createTask = async (gContext) => {
 
     const taskRef = await ref(db, "/tasks/" + task.id);
     await set(taskRef, { ...task });
-    // alert("A new task has been created!");
-
-    
+    await refreshAfter(3000);
   } else {
     // console.log("Task title is empty. Please enter a title.");
   }
@@ -207,8 +210,6 @@ export const editTask = async (taskId, newTitle) => {
     if (db) {
       const taskRef = ref(db, `/tasks/${taskId}`);
       await update(taskRef, { title: newTitle });
-
-      // alert("Task edited successfully");
       await refreshAfter(3000);
     }
   } catch (error) {
@@ -229,7 +230,6 @@ export const deleteTask = async (taskId) => {
     if (db) {
       const taskRef = ref(db, `/tasks/${taskId}`);
       await remove(taskRef);
-      // alert("The task has been deleted successfully");
       await refreshAfter(3000);
     }
   } catch (error) {
@@ -323,7 +323,7 @@ const updateLinkCounter = () => {
   } else {
     const newLinkCounter = parseInt(storedLinkCounter) + 1;
     localStorage.setItem("linkCounter", newLinkCounter);
-    console.log("newLinkCounter", newLinkCounter);
+    // console.log("newLinkCounter", newLinkCounter);
     return newLinkCounter;
   }
 };

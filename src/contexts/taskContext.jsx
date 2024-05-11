@@ -18,15 +18,15 @@ export const TaskContext = createContext({
 
 export const TaskProvider = ({ children }) => {
   const [taskList, setTaskList] = useState([]);
-  const emailCounter = useRef({ count: 0 }); // Convertir a useRef
-  const linkCounter = useRef({ count: 0 }); // Convertir a useRef
+  const emailCounter = useRef({ count: 0 });
+  const linkCounter = useRef({ count: 0 });
 
   const updateEmailCount = () => {
-    emailCounter.current.count += 1; // Actualizar emailCounter con useRef
+    emailCounter.current.count += 1;
   };
 
   const updateLinkCount = () => {
-    linkCounter.current.count += 1; // Actualizar linkCounter con useRef
+    linkCounter.current.count += 1;
   };
 
   useEffect(() => {
@@ -52,8 +52,8 @@ export const TaskProvider = ({ children }) => {
         <TaskContext.Provider
           value={{
             taskList,
-            emailCounter: emailCounter.current, // Acceder al valor actual de useRef
-            linkCounter: linkCounter.current, // Acceder al valor actual de useRef
+            emailCounter: emailCounter.current,
+            linkCounter: linkCounter.current,
             updateEmailCount,
             updateLinkCount,
             titleTask: "",

@@ -46,6 +46,9 @@ function MyCard({ tasks }: MyCardProps) {
   const [windowWidth, setWindowWidth] = useState<number>(0);
   const [open, setOpen] = useState(false);
 
+  const emailRef = useRef(0);
+  const linkRef = useRef(0);
+
   const gContext = useContext(TaskContext);
 
   useEffect(() => {
@@ -61,26 +64,6 @@ function MyCard({ tasks }: MyCardProps) {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
-
-  // const emailCountRef = useRef(0);
-  // const linkCountRef = useRef(0);
-
-  // useEffect(() => {
-  //   if (textValue === "Type to add a new task"){
-  //     setDisabledAll(true);
-  //     // setStarted(true);
-  //     // setColored(true);
-  //   }
-
-  // }, [textValue]);
-
-  // const updateCounter = (color: string) => {
-  //   if (color === colors['email']) {
-  //     emailCountRef.current += 1;
-  //   } else if (color === colors['link']) {
-  //     linkCountRef.current += 1;
-  //   }
-  // };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const data = event.target.value;
@@ -109,18 +92,10 @@ function MyCard({ tasks }: MyCardProps) {
     if (gContext.action && gContext.action === "none") {
       gContext.action = "add";
     }
-    // if (textValue) {
-    //   if (checked) {
-    //     gContext.action = "modify";
-    //   }
-    // }
   };
 
   const handleClickDelete = async (idTask: string) => {
-    // with no confirmation for deleting
-    // console.log("borrando");
     if (tasks && tasks.length > 0) {
-      // console.log("la encontre");
       gContext.action = "delete";
       gContext.dialogText = "The task has been deleted! (updating...)";
       gContext.dialogSeverity = "info";
@@ -131,15 +106,16 @@ function MyCard({ tasks }: MyCardProps) {
   };
 
   const handleClickCheckbox = (e: any, idTask: string) => {
+    // console.log("counterRef.current", counterRef.current);
+    // counterRef.current += 1;
+
     if (tasks && tasks.length > 0) {
       const task = findById(tasks, idTask);
       if (task) {
         if (e.target.checked) {
-          // console.log(task.title);
           setDisabledAll(false);
           setTextValue(task.title);
           gContext.action = "modify";
-          // console.log("idTask", idTask);
           gContext.idTask = idTask;
           gContext.titleTask = task.title;
         } else {
@@ -156,6 +132,7 @@ function MyCard({ tasks }: MyCardProps) {
 
   return (
     <div>
+      {/* {`contador ${counterRef.current}`} */}
       {!started && (
         <Stack
           direction="row"
@@ -236,7 +213,7 @@ function MyCard({ tasks }: MyCardProps) {
                     onClick={(e) => handleClickCheckbox(e, task.id)}
                     disabled={checked && task.id !== gContext.idTask}
                   />
-                  <StringButton text={task.title} />
+                  <StringButton text={task.title} emailRef={emailRef} linkRef={linkRef}  />
                   <IconButton
                     onClick={() => handleClickDelete(task.id)}
                     disabled={checked}

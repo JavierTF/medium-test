@@ -4,7 +4,7 @@ import { DynamicButtonProps } from "@/interfaces/interfaces";
 import CloseIcon from "@mui/icons-material/Close";
 import SaveIcon from "@mui/icons-material/Save";
 import db from "../lib/firebaseSingleton";
-import { isValidTitle, createTask, editTask } from "../utils/utils";
+import { createTask, editTask } from "../utils/utils";
 import { TaskContext } from "@/contexts/taskContext";
 
 const DynamicButton: React.FC<DynamicButtonProps> = ({
@@ -20,7 +20,6 @@ const DynamicButton: React.FC<DynamicButtonProps> = ({
   setDisabledAll,
 }) => {
   const [windowWidth, setWindowWidth] = useState<number>(0);
-  // const [date, setDate] = useState(new Date());
   const gContext = useContext(TaskContext);
 
   useEffect(() => {
@@ -37,41 +36,24 @@ const DynamicButton: React.FC<DynamicButtonProps> = ({
     };
   }, []);
 
-  useEffect(() => {
-    console.log("gContext.dialogText", gContext.dialogText);
-    if (gContext.dialogText != "") {
-      console.log("okokok");
-      //   setOpen(true);
-    } else {
-      //   console.log("nada");
-      //   setOpen(false);
-    }
-  }, [gContext.dialogText]);
-
   const handleClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     if (primary && db) {
-      // console.log("contexto handleCkick", gContext);
       if (gContext.titleTask) {
         if (gContext.action == "add") {
           await createTask(gContext);
           gContext.dialogText = "A new task has been created! (updating...)";
-          // setDate(new Date());
           setOpen(true);
         }
         if (gContext.action == "modify") {
           await editTask(gContext.idTask, gContext.titleTask);
           gContext.dialogText = `The task ${gContext.idTask} has been modified! (updating...)`;
-          // setDate(new Date());
           setOpen(true);
         }
         gContext.dialogSeverity = "success";
       } else {
-        // console.log("entre");
-        // alert("Please, fill the field to add a new task :(");
         gContext.dialogText = "Please, fill the field to add a new task :(";
         gContext.dialogSeverity = "error";
-        // setDate(new Date());
         setOpen(true);
       }
     }
@@ -92,7 +74,6 @@ const DynamicButton: React.FC<DynamicButtonProps> = ({
     : { color: "#666666", borderColor: "#666666" };
 
   if (typeof window !== "undefined") {
-    // Verificar si window está disponible
     if (windowWidth < 1230) {
       buttonSx.paddingRight = 0;
     }
@@ -112,7 +93,6 @@ const DynamicButton: React.FC<DynamicButtonProps> = ({
   icon = icon ?? "";
 
   if (primary) {
-    // console.log('gContext.action', gContext.action)
     if (windowWidth < 1230) {
       if (windowWidth < 420) {
         icon = <SaveIcon sx={{ p: 0.3 }} />;
