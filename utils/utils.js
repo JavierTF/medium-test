@@ -22,7 +22,7 @@ export const colors = {
  * valid URL starting with `http://`, `https://`, or `www.`.
  */
 export const isValidLink = (word) => {
-  return /\bhttps?:\/\/\S+\b/.test(word) || /\bwww\.\S+\b/.test(word);
+  return /\bhttps?:\/\/\S+\b/.test(word) || /\bwww\.\S+\b/.test(word.toLowerCase());
 };
 
 /**
