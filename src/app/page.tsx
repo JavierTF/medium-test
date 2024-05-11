@@ -33,7 +33,7 @@ function TaskContainer() {
               setOpen={setOpen}
             />
           )}
-          <Box sx={{ position: 'fixed', bottom: 0, width: '100%' }}>
+          <Box sx={{ position: 'fixed', bottom: 0, width: '100%', pb: 2 }}>
             {/* Copyrights */}
             <Typography
               variant="subtitle2"
