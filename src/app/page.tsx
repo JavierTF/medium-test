@@ -51,7 +51,7 @@ function TaskContainer() {
               </a>
             </Typography>
 
-            <Typography
+            {/* <Typography
               variant="subtitle2"
               sx={{ color: "gray", fontSize: 12 }}
               align="center"
@@ -64,7 +64,7 @@ function TaskContainer() {
               >
                 Click to see this application code
               </a>
-            </Typography>
+            </Typography> */}
           </Box>
         </Container>
       </Suspense>
