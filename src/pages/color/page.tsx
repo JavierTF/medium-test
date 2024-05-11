@@ -243,7 +243,7 @@ function MyCard({ tasks }: MyCardProps) {
                   />
                   <IconButton
                     onClick={() =>
-                      alert("The functionality will be developed soon :(")
+                      alert("The functionality will be developed soon ")
                     }
                     disabled={checked}
                   >

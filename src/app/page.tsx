@@ -8,6 +8,7 @@ import CustomPaper from "../../components/CustomPaper";
 import LinearProgress from "@mui/material/LinearProgress";
 import CustomSnackbar from "../../components/CustomSnackbar";
 import Typography from "@mui/material/Typography";
+import Box from "@mui/material/Box";
 
 function TaskContainer() {
   const [open, setOpen] = useState(false);
@@ -32,7 +33,7 @@ function TaskContainer() {
               setOpen={setOpen}
             />
           )}
-          <div style={{ position: 'fixed', bottom: 0 }}>
+          <Box sx={{ position: 'fixed', bottom: 0, width: '100%' }}>
             {/* Copyrights */}
             <Typography
               variant="subtitle2"
@@ -64,7 +65,7 @@ function TaskContainer() {
                 Click to see this application code
               </a>
             </Typography>
-          </div>
+          </Box>
         </Container>
       </Suspense>
     </TaskProvider>

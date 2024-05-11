@@ -52,7 +52,7 @@ const DynamicButton: React.FC<DynamicButtonProps> = ({
         }
         gContext.dialogSeverity = "success";
       } else {
-        gContext.dialogText = "Please, fill the field to add a new task :(";
+        gContext.dialogText = "Please, fill the field to add a new task ";
         gContext.dialogSeverity = "error";
         setOpen(true);
       }
