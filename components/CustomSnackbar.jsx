@@ -3,18 +3,21 @@ import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
 import { TaskContext } from "@/contexts/taskContext";
 
-function CustomSnackbar({ open, message, severity, setOpen }) {
+function CustomSnackbar({ open, message, severity, setOpen, duration = 5000 }) {
   const gContext = useContext(TaskContext);
 
   const handleClose = async () => {
     gContext.dialogText = "";
     setOpen(false);
+    if (localStorage.getItem("vpnInfo") === null) {
+      localStorage.setItem("vpnInfo", "hasBeenShown");
+    }
   };
 
   return (
     <Snackbar
       open={open}
-      autoHideDuration={5000}
+      autoHideDuration={duration}
       onClose={handleClose}
       anchorOrigin={{ vertical: "top", horizontal: "center" }}
     >

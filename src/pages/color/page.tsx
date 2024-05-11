@@ -11,6 +11,7 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Checkbox from "@mui/material/Checkbox";
 import Skeleton from "@mui/material/Skeleton";
+import Tooltip from "@mui/material/Tooltip";
 
 // MUI Icons
 import OpenInFullIcon from "@mui/icons-material/OpenInFull";
@@ -21,7 +22,7 @@ import AdjustIcon from "@mui/icons-material/Adjust";
 import CloseIcon from "@mui/icons-material/Close";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import DeleteIcon from "@mui/icons-material/Delete";
-import CheckIcon from '@mui/icons-material/Check';
+import CheckIcon from "@mui/icons-material/Check";
 
 // Next.js
 import Image from "next/image";
@@ -131,6 +132,10 @@ function MyCard({ tasks }: MyCardProps) {
     }
   };
 
+  const handleClickAvatar = () => {
+    window.open("https://portfolio-javier-toussent-fis.vercel.app/", "_blank")
+  };
+
   return (
     <div>
       {/* BeforeStarted Componente */}
@@ -191,13 +196,28 @@ function MyCard({ tasks }: MyCardProps) {
                   />
                 </Box>
               )}
-              <Image
-                src="/images/about.jpg"
-                alt="Avatar"
-                width={32}
-                height={29}
-                style={{ borderRadius: "50%", opacity: disabledAll ? 0.5 : 1 }}
-              />
+              <Tooltip title="Go to my portfolio">
+                <Box
+                  onClick={handleClickAvatar}
+                  onMouseEnter={() => {
+                    document.body.style.cursor = "pointer"; // Change cursor to pointer
+                  }}
+                  onMouseLeave={() => {
+                    document.body.style.cursor = "default"; // Reset cursor to default
+                  }}
+                >
+                  <Image
+                    src="/images/about.jpg"
+                    alt="Avatar"
+                    width={32}
+                    height={29}
+                    style={{
+                      borderRadius: "50%",
+                      opacity: disabledAll ? 0.5 : 1,
+                    }}
+                  />
+                </Box>
+              </Tooltip>
             </Stack>
             {/* TasksList Component */}
             {!tasks ? (
@@ -215,9 +235,15 @@ function MyCard({ tasks }: MyCardProps) {
                     onClick={(e) => handleClickCheckbox(e, task.id)}
                     disabled={checked && task.id !== gContext.idTask}
                   />
-                  <StringButton text={task.title} emailRef={emailRef} linkRef={linkRef}  />
+                  <StringButton
+                    text={task.title}
+                    emailRef={emailRef}
+                    linkRef={linkRef}
+                  />
                   <IconButton
-                    onClick={() => alert("The functionality will be developed soon :(")}
+                    onClick={() =>
+                      alert("The functionality will be developed soon :(")
+                    }
                     disabled={checked}
                   >
                     <CheckIcon color={checked ? "disabled" : "primary"} />
