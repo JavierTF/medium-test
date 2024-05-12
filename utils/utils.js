@@ -12,17 +12,19 @@ export const colors = {
   default: "rgba(0, 0, 0, 1)", // Negro
 };
 
+
 /**
- * The isValidLink function checks if a given word is a valid URL link starting with "http://" or
- * "https://" or "www.".
- * @param word - The `isValidLink` function checks if the given `word` is a valid link. It uses regular
- * expressions to match patterns of URLs starting with `http://` or `https://` followed by
- * non-whitespace characters, or URLs starting with `www.` followed by non-whitespace characters.
- * @returns The `isValidLink` function is being returned. It checks if the input `word` contains a
- * valid URL starting with `http://`, `https://`, or `www.`.
+ * The isValidLink function checks if a given word is a valid link by verifying the absence of the "@"
+ * symbol and the presence of a valid URL pattern.
+ * @param word - The `isValidLink` function checks if a given `word` is a valid link. The function
+ * returns `true` if the `word` does not contain the "@" symbol and matches a URL pattern, and `false`
+ * otherwise.
+ * @returns The `isValidLink` function is returning a boolean value. It checks if the input `word` is a
+ * valid link by ensuring that it does not contain the "@" symbol and matches a pattern for a valid
+ * URL.
  */
 export const isValidLink = (word) => {
-  return /\bhttps?:\/\/\S+\b/.test(word) || /\bwww\.\S+\b/.test(word.toLowerCase());
+  return !/@/.test(word) && /\b(?:(?:https?|ftp):\/\/)?(?:www\.)?\S+\.\S+\b/.test(word.toLowerCase());
 };
 
 /**
@@ -190,7 +192,7 @@ export const createTask = async (gContext) => {
 
     const taskRef = await ref(db, "/tasks/" + task.id);
     await set(taskRef, { ...task });
-    await refreshAfter(3000);
+    // await refreshAfter(3000);
   } else {
     // console.log("Task title is empty. Please enter a title.");
   }
@@ -209,7 +211,7 @@ export const editTask = async (taskId, newTitle) => {
     if (db) {
       const taskRef = ref(db, `/tasks/${taskId}`);
       await update(taskRef, { title: newTitle });
-      await refreshAfter(3000);
+      // await refreshAfter(3000);
     }
   } catch (error) {
     console.error("Error editing task:", error);
@@ -228,7 +230,7 @@ export const deleteTask = async (taskId) => {
     if (db) {
       const taskRef = ref(db, `/tasks/${taskId}`);
       await remove(taskRef);
-      await refreshAfter(3000);
+      // await refreshAfter(3000);
     }
   } catch (error) {
     console.error("Error deleting task:", error);

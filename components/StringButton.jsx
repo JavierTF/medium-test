@@ -40,7 +40,7 @@ const StringButton = ({ text, emailRef, linkRef }) => {
   const elements = [];
 
   for (let index = 0; index < wordCounters.length; index++) {
-    const word = wordCounters[index];    
+    const word = wordCounters[index];
     const color = changeColor(word[0]);
     let icon = null;
     let displayText = word[0];
@@ -75,9 +75,11 @@ const StringButton = ({ text, emailRef, linkRef }) => {
             }}
             startIcon={icon}
           >
-            {color === colors["#"] || color === colors["@"]
-              ? displayText.slice(1)
-              : displayText}
+            <a href={isValidLink(word[0]) ? `${word[0]}` : isValidEmail(word[0]) ? `mailto:${word[0]}` : '#'} target="_blank">
+              {color === colors["#"] || color === colors["@"]
+                ? displayText.slice(1)
+                : displayText}
+            </a>
           </Button>
         )}
         {index !== wordCounters.length - 1 && " "}

@@ -2,8 +2,9 @@ import React, { useContext } from "react";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
 import { TaskContext } from "@/contexts/taskContext";
+import { refreshAfter } from "../utils/utils";
 
-function CustomSnackbar({ open, message, severity, setOpen, duration = 5000 }) {
+function CustomSnackbar({ open, message, severity, setOpen, duration = 2500 }) {
   const gContext = useContext(TaskContext);
 
   const handleClose = async () => {
@@ -12,6 +13,7 @@ function CustomSnackbar({ open, message, severity, setOpen, duration = 5000 }) {
     if (localStorage.getItem("vpnInfo") === null) {
       localStorage.setItem("vpnInfo", "hasBeenShown");
     }
+    await refreshAfter(0);
   };
 
   return (
