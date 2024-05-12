@@ -40,7 +40,7 @@ export const isValidEmail = (word) => {
 };
 
 export function cleanURL(url) {
-  const regex = /^(?:https?:\/\/)?(?:localhost:3000\/|medium-test-three\.vercel\.app\/)?(?:www\.)?([^\s/]+(?:\/\S+)?)/;
+  const regex = /^(?:https?:\/\/)?(?:localhost:3000\/|medium-test-three\.vercel\.app\/)?(.*)$/;
   const match = url.match(regex);
   if (match) {
     return match[1];
@@ -48,7 +48,6 @@ export function cleanURL(url) {
     return url;
   }
 }
-
 
 /**
  * The function `changeColor` takes a word as input and returns a color based on certain conditions

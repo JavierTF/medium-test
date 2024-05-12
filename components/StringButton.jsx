@@ -71,7 +71,7 @@ const StringButton = ({ text, emailRef, linkRef }) => {
                 ? cleanURL(word[0])
                 : isValidEmail(word[0])
                 ? `mailto:${word[0]}`
-                : null
+                : "#"
             }
             target="_blank"
           >
