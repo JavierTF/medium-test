@@ -68,12 +68,14 @@ const StringButton = ({ text, emailRef, linkRef }) => {
           <a
             href={
               isValidLink(word[0])
-                ? cleanURL(word[0])
+                // ? 'https://www.google.com'
+                ? `https://${cleanURL(word[0])}`
                 : isValidEmail(word[0])
                 ? `mailto:${word[0]}`
                 : "#"
             }
             target="_blank"
+            rel="noopener noreferrer"
           >
             <Button
               variant="text"

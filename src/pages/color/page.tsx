@@ -350,7 +350,6 @@ function MyCard({ tasks }: MyCardProps) {
               message={gContext.dialogText}
               severity={gContext.dialogSeverity}
               setOpen={setOpen}
-              duration={5000}
             />
           )}
         </React.Fragment>

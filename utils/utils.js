@@ -202,7 +202,7 @@ export const createTask = async (gContext) => {
 
     const taskRef = await ref(db, "/tasks/" + task.id);
     await set(taskRef, { ...task });
-    // await refreshAfter(3000);
+    await refreshAfter(2800);
   } else {
     // console.log("Task title is empty. Please enter a title.");
   }
@@ -221,7 +221,7 @@ export const editTask = async (taskId, newTitle) => {
     if (db) {
       const taskRef = ref(db, `/tasks/${taskId}`);
       await update(taskRef, { title: newTitle });
-      // await refreshAfter(3000);
+      await refreshAfter(2800);
     }
   } catch (error) {
     console.error("Error editing task:", error);
@@ -240,7 +240,7 @@ export const deleteTask = async (taskId) => {
     if (db) {
       const taskRef = ref(db, `/tasks/${taskId}`);
       await remove(taskRef);
-      // await refreshAfter(3000);
+      await refreshAfter(2800);
     }
   } catch (error) {
     console.error("Error deleting task:", error);

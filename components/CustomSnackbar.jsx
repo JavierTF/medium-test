@@ -13,7 +13,7 @@ function CustomSnackbar({ open, message, severity, setOpen, duration = 2500 }) {
     if (localStorage.getItem("vpnInfo") === null) {
       localStorage.setItem("vpnInfo", "hasBeenShown");
     }
-    await refreshAfter(0);
+    // await refreshAfter(0);
   };
 
   return (
