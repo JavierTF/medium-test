@@ -39,6 +39,17 @@ export const isValidEmail = (word) => {
   return /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b/.test(word);
 };
 
+export function cleanURL(url) {
+  const regex = /^(?:https?:\/\/)?(?:localhost:3000\/|medium-test-three\.vercel\.app\/)?(?:www\.)?([^\s/]+(?:\/\S+)?)/;
+  const match = url.match(regex);
+  if (match) {
+    return match[1];
+  } else {
+    return url;
+  }
+}
+
+
 /**
  * The function `changeColor` takes a word as input and returns a color based on certain conditions
  * such as starting with '@', '#', being a link, an email, or default color.

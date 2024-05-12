@@ -10,6 +10,7 @@ import {
   getWordCountersSingleton,
   isValidEmail,
   isValidLink,
+  cleanURL,
 } from "../utils/utils.js";
 import MailOutlineIcon from "@mui/icons-material/MailOutline";
 import NumbersIcon from "@mui/icons-material/Numbers";
@@ -64,23 +65,32 @@ const StringButton = ({ text, emailRef, linkRef }) => {
             {word[0]}
           </Typography>
         ) : (
-          <Button
-            variant="text"
-            sx={{
-              backgroundColor: lightenColor(color),
-              borderRadius: "25px",
-              color: color,
-              py: 0.2,
-              fontSize: 12,
-            }}
-            startIcon={icon}
+          <a
+            href={
+              isValidLink(word[0])
+                ? cleanURL(word[0])
+                : isValidEmail(word[0])
+                ? `mailto:${word[0]}`
+                : null
+            }
+            target="_blank"
           >
-            <a href={isValidLink(word[0]) ? `${word[0]}` : isValidEmail(word[0]) ? `mailto:${word[0]}` : '#'} target="_blank">
+            <Button
+              variant="text"
+              sx={{
+                backgroundColor: lightenColor(color),
+                borderRadius: "25px",
+                color: color,
+                py: 0.2,
+                fontSize: 12,
+              }}
+              startIcon={icon}
+            >
               {color === colors["#"] || color === colors["@"]
                 ? displayText.slice(1)
                 : displayText}
-            </a>
-          </Button>
+            </Button>
+          </a>
         )}
         {index !== wordCounters.length - 1 && " "}
       </React.Fragment>

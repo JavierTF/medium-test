@@ -16,6 +16,7 @@ This app is a TO-DO that loads tasks stored in the Firebase real-time database. 
 - Delete task
 - Done task (soon)
 - Show alerts
+- Open links or email after click over them
 
 ## Technology
 - [Next.js](14.2.3)
