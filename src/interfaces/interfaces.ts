@@ -12,6 +12,7 @@ export interface DynamicButtonProps {
   setOpen?: any;
   setTextValue?: any;
   setDisabledAll?: any;
+  setChecked?: any;
 }
 
 export interface StringTypographyProps {

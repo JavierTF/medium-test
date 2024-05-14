@@ -18,6 +18,7 @@ const DynamicButton: React.FC<DynamicButtonProps> = ({
   setOpen,
   setTextValue,
   setDisabledAll,
+  setChecked,
 }) => {
   const [windowWidth, setWindowWidth] = useState<number>(0);
   const gContext = useContext(TaskContext);
@@ -62,6 +63,7 @@ const DynamicButton: React.FC<DynamicButtonProps> = ({
   const handleClickCancel = () => {
     setTextValue("");
     setDisabledAll(true);
+    setChecked(false);
     gContext.dialogText = "";
     gContext.action = "none";
   };

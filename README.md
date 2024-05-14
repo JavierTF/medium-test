@@ -1,3 +1,9 @@
+# notes:
+- Because user input is very limited, as well as the application's functionalities, there is little use of try-catch.
+- The MyCard component (and perhaps others), located in ./src/pages/color/page.tsx, can and should be divided (according to one of the most important principles of React, the 'single responsibility principle'), but it has been decided to leave it as it is.
+
+######
+
 # Name
 medium-test-javier-toussent-fis
 

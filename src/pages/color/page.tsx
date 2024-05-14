@@ -328,6 +328,8 @@ function MyCard({ tasks }: MyCardProps) {
                     url={null}
                     setTextValue={setTextValue}
                     setDisabledAll={setDisabledAll}
+                    // this functionality is not done yet
+                    setChecked={setChecked}
                   />
                   <DynamicButton
                     icon={<CloseIcon />}
