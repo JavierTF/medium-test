@@ -24,7 +24,13 @@ export const colors = {
  * URL.
  */
 export const isValidLink = (word) => {
-  return !/@/.test(word) && /\b(?:(?:https?|ftp):\/\/)?(?:www\.)?\S+\.\S+\b/.test(word.toLowerCase());
+  try {
+    word = word.toLowerCase();
+    return !/@/.test(word) && /\b(?:(?:https?|ftp):\/\/)?(?:www\.)?\S+\.\S+\b/.test(word);
+  } catch (error){
+    console.log('Impossible to apply lower case to non string');
+    throw error;
+  }
 };
 
 /**

@@ -16,7 +16,7 @@ function CustomPaper({ elevation = 3, sx = {} }) {
 
   return (
     <Paper elevation={elevation} sx={{ ...sx }}>
-      {!taskList ? <LinearProgress /> : <MyCard tasks={taskList} />}
+        {!taskList ? <LinearProgress /> : <MyCard tasks={taskList} />}
     </Paper>
   );
 }
